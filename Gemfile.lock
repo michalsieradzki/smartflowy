@@ -44,6 +44,12 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
+    active_storage_validations (2.0.2)
+      activejob (>= 6.1.4)
+      activemodel (>= 6.1.4)
+      activestorage (>= 6.1.4)
+      activesupport (>= 6.1.4)
+      marcel (>= 1.0.3)
     activejob (8.0.1)
       activesupport (= 8.0.1)
       globalid (>= 0.3.6)
@@ -127,6 +133,13 @@ GEM
     et-orbi (1.2.11)
       tzinfo
     execjs (2.10.0)
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.4.4)
+      factory_bot (~> 6.5)
+      railties (>= 5.0.0)
+    faker (3.5.1)
+      i18n (>= 1.8.11, < 2)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -365,6 +378,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    shoulda-matchers (6.4.0)
+      activesupport (>= 5.2.0)
     slim (5.2.1)
       temple (~> 0.10.0)
       tilt (>= 2.1.0)
@@ -454,6 +469,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  active_storage_validations
   bootsnap
   bootstrap (~> 5.3.3)
   brakeman
@@ -462,6 +478,8 @@ DEPENDENCIES
   dartsass-rails
   debug
   devise
+  factory_bot_rails
+  faker
   importmap-rails
   jbuilder
   kamal
@@ -471,6 +489,7 @@ DEPENDENCIES
   rspec-rails (~> 6.1.0)
   rubocop-rails-omakase
   selenium-webdriver
+  shoulda-matchers
   slim-rails
   solid_cable
   solid_cache

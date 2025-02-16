@@ -1,0 +1,5 @@
+id,email,role_mask,created_at,updated_at,regulations_aggreement,nick,name,surname,marketing_acceptance
+2,admin@smartshack.pl,A,2024-09-18 19:13:35 UTC,2024-09-19 05:43:01 UTC,,smartshack_admin,,,
+3,standard@smartshack.pl,S,2024-09-18 19:13:35 UTC,2024-09-18 19:13:35 UTC,,smartshack_standard,,,
+4,premium@smartshack.pl,S,2024-09-18 19:13:35 UTC,2024-09-18 19:13:35 UTC,,smartshack_premium,,,
+10,michal.sieradzki@mail.com,S,2024-09-18 19:47:19 UTC,2024-09-18 19:51:14 UTC,true,michalsieradzki,,,false

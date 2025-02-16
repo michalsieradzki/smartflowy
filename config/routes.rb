@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    root to: 'dashboard#index'
+    resources :users
+    resources :teams
+  end
   devise_for :users
   root 'pages#dashboard'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

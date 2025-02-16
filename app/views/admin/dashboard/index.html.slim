@@ -1,0 +1,34 @@
+.row
+  .col-md-4
+    .card.mb-4
+      .card-body
+        h5.card-title Użytkownicy
+        .display-4 = @users_count
+        small.text-muted Łącznie w systemie
+
+  .col-md-4
+    .card.mb-4
+      .card-body
+        h5.card-title Zespoły
+        .display-4 = @teams_count
+        small.text-muted Aktywne zespoły
+
+.row
+  .col-md-8
+    .card
+      .card-body
+        h5.card-title Ostatnio dodani użytkownicy
+        table.table
+          thead
+            tr
+              th Imię i nazwisko
+              th Email
+              th Rola
+              th Data dodania
+          tbody
+            - @recent_users.each do |user|
+              tr
+                td = user.full_name
+                td = user.email
+                td = user.role
+                td = l user.created_at, format: :short

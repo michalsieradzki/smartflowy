@@ -42,6 +42,7 @@ gem "bootstrap", "~> 5.3.3"
 gem 'slim-rails'
 gem 'devise'
 gem 'cancancan'
+gem 'active_storage_validations'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -51,7 +52,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 6.1.0'
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
-
+  gem 'factory_bot_rails'
+  gem 'faker' 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
@@ -65,4 +67,5 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'shoulda-matchers'
 end
