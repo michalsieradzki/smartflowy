@@ -1,0 +1,36 @@
+.card
+  .card-header.d-flex.justify-content-between.align-items-center
+    h5.mb-0 Użytkownicy
+    = link_to new_admin_user_path, class: 'btn btn-primary' do
+      i.bi.bi-plus
+      |  Dodaj użytkownika
+
+  .card-body
+    table.table
+      thead
+        tr
+          th Imię i nazwisko
+          th Email
+          th Rola
+          th Firma
+          th Status
+          th
+      tbody
+        - @users.each do |user|
+          tr
+            td = user.full_name
+            td = user.email
+            td = user.role.humanize
+            td = user.company.name
+            td 
+              - if user.disabled?
+                span.badge.bg-danger Nieaktywny
+              - else
+                span.badge.bg-success Aktywny
+            td.text-end
+              .btn-group
+                = link_to edit_admin_user_path(user), class: 'btn btn-sm btn-outline-primary' do
+                  i.bi.bi-pencil
+                - unless user.disabled?
+                  = button_to disable_admin_user_path(user), method: :patch, class: 'btn btn-sm btn-outline-danger', data: { confirm: 'Czy na pewno chcesz dezaktywować tego użytkownika?' } do
+                    i.bi.bi-lock

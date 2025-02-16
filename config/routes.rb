@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
   namespace :admin do
     root to: 'dashboard#index'
-    resources :users
+    resources :users do
+      member do
+        patch :disable
+      end
+    end
     resources :teams
+    resources :companies, only: [:index, :new, :create, :edit, :update]
   end
   devise_for :users
   root 'pages#dashboard'
