@@ -1,0 +1,27 @@
+services:
+  web:
+    build:
+      context: .
+      target: base
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+      - tmp:/rails/tmp
+      - storage:/rails/storage
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=sqlite3:///rails/db/development.sqlite3
+    command: >
+      bash -c "bundle install &&
+               rm -f tmp/pids/server.pid &&
+               bundle exec rails db:prepare &&
+               bundle exec rails server -b '0.0.0.0' -p 3000"
+    stdin_open: true
+    tty: true
+
+volumes:
+  bundle:
+  tmp:
+  storage:
