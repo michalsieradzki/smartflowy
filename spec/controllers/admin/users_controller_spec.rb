@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Admin::UsersController, type: :controller do
   let(:company) { create(:company) }
 
-  # Zmieńmy sposób tworzenia użytkowników
   let!(:superadmin) do
     create(:user,
            email: 'superadmin@example.com',
@@ -41,30 +40,24 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(response).to be_successful
       end
 
-      it 'assigns all users as @users' do
+      it 'assigns all users as @resources' do
         users = create_list(:user, 3, company: company)
         get :index
-        actual_users = assigns(:users).to_a
-
-        expect(actual_users).to include(superadmin)
-        users.each { |user| expect(actual_users).to include(user) }
+        expect(assigns(:resources)).to include(superadmin, *users)
       end
     end
 
     context 'as company_admin' do
       before { sign_in company_admin }
 
-      it 'assigns only company users as @users' do
-        other_company = create(:company)
+      it 'assigns only company users as @resources' do
         company_users = create_list(:user, 2, company: company)
+        other_company = create(:company)
         other_users = create_list(:user, 2, company: other_company)
 
         get :index
-        actual_users = assigns(:users).to_a
-
-        expect(actual_users).to include(company_admin)
-        company_users.each { |user| expect(actual_users).to include(user) }
-        other_users.each { |user| expect(actual_users).not_to include(user) }
+        expect(assigns(:resources)).to include(company_admin, *company_users)
+        expect(assigns(:resources)).not_to include(*other_users)
       end
     end
 
@@ -88,9 +81,9 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(response).to be_successful
       end
 
-      it 'assigns a new user as @user' do
+      it 'assigns a new user as @resource' do
         get :new
-        expect(assigns(:user)).to be_a_new(User)
+        expect(assigns(:resource)).to be_a_new(User)
       end
     end
   end
@@ -158,9 +151,10 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(response).to be_successful
       end
 
-      it 'assigns the requested user as @user' do
+      it 'assigns the requested user as @resource' do
+        user = create(:user, company: company)
         get :edit, params: { id: user.id }
-        expect(assigns(:user)).to eq(user)
+        expect(assigns(:resource)).to eq(user)
       end
     end
   end

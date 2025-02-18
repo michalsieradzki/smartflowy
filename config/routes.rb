@@ -6,7 +6,11 @@ Rails.application.routes.draw do
         patch :disable
       end
     end
-    resources :teams
+    resources :teams do
+      member do
+        delete :remove_member
+      end
+    end
     resources :companies, only: [:index, :new, :create, :edit, :update]
   end
   devise_for :users

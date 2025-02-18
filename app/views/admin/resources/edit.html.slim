@@ -1,0 +1,7 @@
+.card
+  .card-header
+    h5.mb-0 
+      | Edycja 
+      = resource_class.model_name.human
+  .card-body
+    = render 'form', resource: @resource

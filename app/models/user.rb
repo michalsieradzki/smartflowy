@@ -32,4 +32,12 @@ class User < ApplicationRecord
   def enable!
     update!(disabled: false)
   end
+
+  def destroy
+    if disabled?
+      update!(disabled: false)
+    else
+      update!(disabled: true)
+    end
+  end
 end

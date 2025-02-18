@@ -1,0 +1,13 @@
+.btn-group
+  = link_to [:edit, :admin, user], class: 'btn btn-sm btn-outline-primary' do
+    i.bi.bi-pencil
+  - if user.disabled?
+    = button_to [:admin, user], method: :delete, 
+        class: 'btn btn-sm btn-outline-success',
+        data: { confirm: 'Czy na pewno chcesz aktywować tego użytkownika?' } do
+      i.bi.bi-unlock
+  - else
+    = button_to [:admin, user], method: :delete,
+        class: 'btn btn-sm btn-outline-danger',
+        data: { confirm: 'Czy na pewno chcesz dezaktywować tego użytkownika?' } do
+      i.bi.bi-lock

@@ -1,0 +1,7 @@
+.btn-group
+  = link_to [:edit, :admin, resource], class: 'btn btn-sm btn-outline-primary' do
+    i.bi.bi-pencil
+  = button_to [:admin, resource], method: :delete,
+      class: 'btn btn-sm btn-outline-danger',
+      data: { confirm: 'Czy na pewno chcesz usunąć ten zespół?' } do
+    i.bi.bi-trash

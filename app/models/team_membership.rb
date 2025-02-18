@@ -2,7 +2,14 @@ class TeamMembership < ApplicationRecord
   belongs_to :user
   belongs_to :team
 
-  validates :role, presence: true,
-                  inclusion: { in: %w[member leader admin] }
-  validates :user_id, uniqueness: { scope: :team_id }
+  validates :user_id, presence: true, uniqueness: { scope: :team_id }
+  validates :role, inclusion: { in: %w[member leader admin] }
+
+  after_initialize :set_default_role
+
+  private
+
+  def set_default_role
+    self.role ||= 'member'
+  end
 end

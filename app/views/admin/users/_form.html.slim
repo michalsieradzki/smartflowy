@@ -1,4 +1,5 @@
-= form_with model: [:admin, @user], local: true do |f|
+i.bi.bi-airplane-fill
+= form_with model: [:admin, @resource], local: true do |f|
   .row
     .col-md-6
       .mb-3
@@ -31,6 +32,11 @@
   .mb-3
     = f.label :position, class: 'form-label'
     = f.text_field :position, class: 'form-control'
+
+  - if f.object.new_record?
+    .mb-3
+      = f.label :password, class: 'form-label'
+      = f.password_field :password, class: 'form-control'
 
   .text-end
     = link_to 'Anuluj', admin_users_path, class: 'btn btn-link'
