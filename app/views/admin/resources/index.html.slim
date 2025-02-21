@@ -1,9 +1,22 @@
 .card
   .card-header.d-flex.justify-content-between.align-items-center
     h5.mb-0 = resource_class.model_name.human(count: 2)
-    = link_to new_polymorphic_path([:admin, resource_class]), class: 'btn btn-primary' do
-      i.bi.bi-plus
-      |  Dodaj
+    .btn-group
+      button.btn.btn-outline-secondary.btn-sm[
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#filters"
+        aria-expanded="false"
+      ]
+        i.bi.bi-funnel
+        |  Filtry
+      = link_to new_polymorphic_path([:admin, resource_class]), class: 'btn btn-primary btn-sm' do
+        i.bi.bi-plus
+        |  Dodaj
+
+  #filters.collapse.show
+    .card-header.border-top
+      = render 'shared/filters'
 
   .card-body
     table.table

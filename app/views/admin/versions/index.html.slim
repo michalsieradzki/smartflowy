@@ -1,0 +1,29 @@
+.card
+  .card-header.d-flex.justify-content-between.align-items-center
+    h5.mb-0 = t('admin.versions.index.title')
+
+  .card-body
+    table.table
+      thead
+        tr
+          th = PaperTrail::Version.human_attribute_name(:created_at)
+          th = PaperTrail::Version.human_attribute_name(:item_type)
+          th = PaperTrail::Version.human_attribute_name(:event)
+          th = PaperTrail::Version.human_attribute_name(:changes)
+          th = PaperTrail::Version.human_attribute_name(:whodunnit)
+      tbody
+        - @resources.each do |version|
+          tr
+            td = l version.created_at, format: :short
+            td 
+              = version.item_type
+              - if version.item
+                = " ##{version.item_id}"
+            td
+              span class="badge bg-#{version_badge_class(version.event)}"
+                = t("versions.events.#{version.event}")
+            td = render "changes", version: version
+            td = version.whodunnit ? (User.find_by(id: version.whodunnit)&.full_name || 'Usunięty użytkownik') : 'System'
+    
+    .mt-3
+      = paginate @resources

@@ -1,7 +1,12 @@
 class Admin::ResourcesController < Admin::BaseController
   helper_method :resource_class, :resource_name
   def index
-    @resources = resource_class.accessible_by(current_ability).order(created_at: :desc)
+    @q = resource_class.ransack(params[:q])
+    @resources = @q.result(distinct: true)
+                  .accessible_by(current_ability)
+                  .order(created_at: :desc)
+                  .page(params[:page])
+                  .per(20)
   end
 
   def new

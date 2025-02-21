@@ -1,2 +1,25 @@
- @import "bootstrap";
- @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+$primary: #A31621;
+$secondary: #4E8098;
+$success: #90C2E7;
+$info: #CED3DC;
+$warning: #FCF7F8;
+$danger: #A31621;
+$light: #FCF7F8;
+$dark: #0a3041;
+$body-bg: #e1dada;
+$body-color: #4E8098;
+@import "bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+body{
+  font-family: 'Montserrat';
+  font-weight: 300;
+}
+.btn, .form-control, .card, .dropdown-menu{
+  border-radius: 0;
+}
+.btn-sm{
+  border:none;
+}

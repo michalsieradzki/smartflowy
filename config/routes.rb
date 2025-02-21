@@ -11,6 +11,7 @@ Rails.application.routes.draw do
         delete :remove_member
       end
     end
+    resources :versions, only: [:index, :show]
     resources :companies, only: [:index, :new, :create, :edit, :update]
   end
   devise_for :users

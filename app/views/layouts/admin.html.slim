@@ -5,43 +5,48 @@ html
     meta name="viewport" content="width=device-width,initial-scale=1"
     = csrf_meta_tags
     = csp_meta_tag
-    link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"
     = stylesheet_link_tag "application"
     = javascript_importmap_tags
 
-  body
-    .test-style
-      p Test stylów SCSS
-    .admin-wrapper
-      / Sidebar
-      .admin-sidebar.bg-dark.text-white
-        .p-3
-          h5.sidebar-heading SmartFlowy Admin
+  body.d-flex
+    / Sidebar
+    .sidebar.bg-dark.text-white.d-flex.flex-column.flex-shrink-0.p-3[style="width: 280px;"]
+      a.d-flex.align-items-center.mb-3.mb-md-0.me-md-auto.text-white.text-decoration-none[href="/"]
+        span.fs-4 SmartFlowy Admin
+      
+      hr
+      
+      ul.nav.nav-pills.flex-column.mb-auto
+        li.nav-item
+          = link_to admin_root_path, class: "nav-link text-white #{'active' if controller_name == 'dashboard'}" do
+            i.bi.bi-speedometer2.me-2
+            | Dashboard
+        li.nav-item
+          = link_to admin_users_path, class: "nav-link text-white #{'active' if controller_name == 'users'}" do
+            i.bi.bi-people.me-2
+            | Użytkownicy
+        li.nav-item
+          = link_to admin_teams_path, class: "nav-link text-white #{'active' if controller_name == 'teams'}" do
+            i.bi.bi-diagram-3.me-2
+            | Zespoły
+        li.nav-item
+          = link_to admin_versions_path, class: "nav-link text-white #{'active' if controller_name == 'versions'}" do
+            i.bi.bi-clock-history.me-2
+            | Historia zmian
+
+    / Main content
+    .flex-grow-1.d-flex.flex-column[style="min-height: 100vh;"]
+      nav.navbar.navbar-expand.navbar-light.bg-white.border-bottom
+        .container-fluid
+          button#sidebarToggle.btn.btn-link.d-md-none
+            i.bi.bi-list
           
-          nav.nav.flex-column.mt-4
-            = link_to admin_root_path, class: "nav-link text-white #{'active' if current_page?(admin_root_path)}"
-              i.bi.bi-speedometer2.me-2
-              | Dashboard
-            = link_to admin_users_path, class: "nav-link text-white #{'active' if controller_name == 'users'}"
-              i.bi.bi-people.me-2
-              | Użytkownicy
-            = link_to admin_teams_path, class: "nav-link text-white #{'active' if controller_name == 'teams'}"
-              i.bi.bi-diagram-3.me-2
-              | Zespoły
+          .ms-auto
+            .dropdown
+              button.btn.btn-link.dropdown-toggle[type="button" data-bs-toggle="dropdown"]
+                = current_user.full_name
+              ul.dropdown-menu.dropdown-menu-end
+                li = link_to "Wyloguj", destroy_user_session_path, method: :delete, class: "dropdown-item"
 
-      / Main content
-      .admin-content
-        nav.navbar.navbar-expand-lg.navbar-light.bg-white.border-bottom
-          .container-fluid
-            button.btn.btn-link.sidebar-toggle
-              i.bi.bi-list
-            .ms-auto
-              .dropdown
-                button.btn.btn-link.dropdown-toggle[type="button" data-bs-toggle="dropdown"]
-                  = current_user.full_name
-                ul.dropdown-menu.dropdown-menu-end
-                  li = link_to "Wyloguj", destroy_user_session_path, method: :delete, class: "dropdown-item"
-
-        .container-fluid.py-4
-          = render 'shared/flash_messages'
-          = yield
+      main.flex-grow-1.p-3
+        = yield

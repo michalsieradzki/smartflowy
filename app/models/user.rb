@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_paper_trail
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
@@ -39,5 +40,13 @@ class User < ApplicationRecord
     else
       update!(disabled: true)
     end
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[email first_name last_name role company_id position created_at]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[company teams]
   end
 end

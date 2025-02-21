@@ -1,0 +1,6 @@
+- if version.event == 'create'
+  | Utworzono nowy obiekt
+- elsif version.event == 'destroy'
+  | Usunięto obiekt
+- else
+  = format_changes(version.changeset)

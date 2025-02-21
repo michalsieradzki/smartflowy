@@ -1,0 +1,202 @@
+pl:
+  time:
+    formats:
+      default: "%d-%m-%Y %H:%M"
+      short: "%d %b %H:%M"
+      long: "%d %B %Y %H:%M"
+  date:
+    formats:
+      default: "%d-%m-%Y"
+      short: "%d %b"
+      long: "%d %B %Y"
+    day_names: [niedziela, poniedziałek, wtorek, środa, czwartek, piątek, sobota]
+    abbr_day_names: [nie, pon, wto, śro, czw, pią, sob]
+    month_names: [~, stycznia, lutego, marca, kwietnia, maja, czerwca, lipca, sierpnia, września, października, listopada, grudnia]
+    abbr_month_names: [~, sty, lut, mar, kwi, maj, cze, lip, sie, wrz, paź, lis, gru]
+    order:
+      - :day
+      - :month
+      - :year
+  activerecord:
+    models:
+      user:
+        one: Użytkownik
+        other: Użytkownicy
+      team:
+        one: Zespół
+        other: Zespoły
+      team_membership:
+        one: Członkostwo w zespole
+        other: Członkostwa w zespołach
+      company:
+        one: Firma
+        other: Firmy
+      paper_trail/version:
+        one: Historia zmian
+        other: Historia zmian
+
+    attributes:
+      user:
+        email: Email
+        password: Hasło
+        password_confirmation: Potwierdzenie hasła
+        first_name: Imię
+        last_name: Nazwisko
+        full_name: Imię i nazwisko
+        role: Rola
+        company: Firma
+        company_id: Firma
+        position: Stanowisko
+        phone: Telefon
+        disabled: Dezaktywowany
+        roles:
+          superadmin: Superadministrator
+          company_admin: Administrator firmy
+          project_manager: Manager projektu
+          user: Użytkownik
+      
+      team:
+        name: Nazwa
+        description: Opis
+        company: Firma
+        company_id: Firma
+        users: Członkowie
+        created_at: Data utworzenia
+        updated_at: Data aktualizacji
+
+      team_membership:
+        user: Użytkownik
+        team: Zespół
+        role: Rola
+        roles:
+          member: Członek
+          leader: Lider
+          admin: Administrator
+
+      company:
+        name: Nazwa
+        description: Opis
+        logo: Logo
+      paper_trail/version:
+        item_type: Typ obiektu
+        item_id: ID obiektu
+        event: Akcja
+        whodunnit: Wykonawca
+        created_at: Czas
+        changes: Zmiany
+
+  admin:
+    dashboard:
+      title: Panel administracyjny
+    shared:
+      actions: Akcje
+      are_you_sure: Czy jesteś pewien?
+      back: Powrót
+      cancel: Anuluj
+      create: Utwórz
+      delete: Usuń
+      edit: Edytuj
+      new: Nowy
+      save: Zapisz
+      show: Pokaż
+      filter: Filtruj
+      clear_filters: Wyczyść filtry
+      search: Szukaj
+      all: Wszystkie
+    
+    users:
+      index:
+        title: Użytkownicy
+        new: Nowy użytkownik
+      new:
+        title: Nowy użytkownik
+      edit:
+        title: Edycja użytkownika
+      create:
+        success: Użytkownik został utworzony
+      update:
+        success: Użytkownik został zaktualizowany
+      destroy:
+        success: Użytkownik został usunięty
+      disable:
+        success: Użytkownik został dezaktywowany
+      enable:
+        success: Użytkownik został aktywowany
+
+    teams:
+      index:
+        title: Zespoły
+        new: Nowy zespół
+      new:
+        title: Nowy zespół
+      edit:
+        title: Edycja zespołu
+      create:
+        success: Zespół został utworzony
+      update:
+        success: Zespół został zaktualizowany
+      destroy:
+        success: Zespół został usunięty
+
+    versions:
+      index:
+        title: Historia zmian
+      events:
+        create: Utworzenie
+        update: Aktualizacja
+        destroy: Usunięcie
+
+  helpers:
+    select:
+      prompt: Proszę wybrać
+    submit:
+      create: Utwórz %{model}
+      update: Aktualizuj %{model}
+      submit: Zapisz %{model}
+
+  errors:
+    messages:
+      not_found: nie znaleziono
+      already_confirmed: już został aktywowany
+      not_locked: nie był zablokowany
+      not_saved:
+        one: '%{resource} nie został zapisany z powodu błędu:'
+        other: '%{resource} nie został zapisany z powodu następujących błędów:'
+
+  devise:
+    sessions:
+      signed_in: Zalogowano pomyślnie.
+      signed_out: Wylogowano pomyślnie.
+    passwords:
+      send_instructions: Instrukcja zmiany hasła zostanie wysłana na podany adres email.
+      updated: Hasło zostało zmienione. Zostałeś automatycznie zalogowany.
+    registrations:
+      signed_up: Rejestracja zakończona pomyślnie.
+      updated: Konto zostało zaktualizowane.
+      destroyed: Konto zostało usunięte.
+    confirmations:
+      send_instructions: Instrukcja aktywacji konta została wysłana na podany adres email.
+      confirmed: Konto zostało aktywowane.
+  ransack:
+    asc: rosnąco
+    desc: malejąco
+    predicates:
+      cont: zawiera
+      not_cont: nie zawiera
+      eq: równe
+      not_eq: nie równe
+      gteq: większe lub równe
+      lteq: mniejsze lub równe
+    attributes:
+      user:
+        email_cont: Email zawiera
+        first_name_cont: Imię zawiera
+        last_name_cont: Nazwisko zawiera
+        role_eq: Rola
+        created_at_gteq: Data utworzenia od
+        created_at_lteq: Data utworzenia do
+      team:
+        name_cont: Nazwa zawiera
+        created_at_gteq: Data utworzenia od
+        created_at_lteq: Data utworzenia do
+        description_cont: Opis

@@ -43,6 +43,7 @@ gem 'slim-rails'
 gem 'devise'
 gem 'cancancan'
 gem 'active_storage_validations'
+gem 'paper_trail'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -57,6 +58,8 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem 'rails-controller-testing'
+  gem 'kaminari'
+  gem 'ransack'
 end
 
 group :development do

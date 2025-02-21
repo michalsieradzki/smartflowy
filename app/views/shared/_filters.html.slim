@@ -1,0 +1,31 @@
+.card-body.py-2
+  = search_form_for [:admin, @q] do |f|
+    .row.g-2
+      - resource_filters.each do |filter|
+        div class="col-#{filter[:width] || 'auto'}"
+          .form-group
+            - case filter[:type]
+            - when :string
+              = f.search_field filter[:attribute], 
+                  class: 'form-control form-control-sm',
+                  placeholder: t("ransack.attributes.#{resource_class.name.underscore}.#{filter[:attribute]}")
+            - when :select
+              = f.select filter[:attribute], 
+                  filter[:collection], 
+                  { include_blank: t("ransack.attributes.#{resource_class.name.underscore}.#{filter[:attribute]}") }, 
+                  class: 'form-control form-control-sm'
+            - when :date_range
+              .input-group.input-group-sm
+                = f.date_field "#{filter[:attribute]}_gteq", 
+                    class: 'form-control form-control-sm',
+                    placeholder: 'Od'
+                = f.date_field "#{filter[:attribute]}_lteq", 
+                    class: 'form-control form-control-sm',
+                    placeholder: 'Do'
+      
+      .col-auto.d-flex
+        .form-group
+          = f.submit t('admin.shared.filter'), class: 'btn btn-sm btn-primary me-1'
+          = link_to t('admin.shared.clear_filters'), 
+              request.path, 
+              class: 'btn btn-sm btn-outline-secondary'
