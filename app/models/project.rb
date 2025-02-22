@@ -3,6 +3,8 @@ class Project < ApplicationRecord
   belongs_to :project_manager, class_name: 'User'
   has_many :project_members, dependent: :destroy
   has_many :users, through: :project_members
+  has_many :todo_lists, -> { order(position: :asc) }, dependent: :destroy
+  has_many :tasks, through: :todo_lists
   has_many_attached :attachments
 
   validates :name, presence: true

@@ -31,6 +31,9 @@ pl:
       company:
         one: Firma
         other: Firmy
+      comment:
+        one: Komentarz
+        other: Komentarze
       paper_trail/version:
         one: Historia zmian
         other: Historia zmian
@@ -70,6 +73,15 @@ pl:
         blank: "nie może być pusty"
         invalid: "jest nieprawidłowy"
         taken: "jest już zajęty"
+      models:
+        comment:
+          attributes:
+            content:
+              blank: "nie może być pusta"
+            user:
+              required: "musi być wybrany"
+            commentable:
+              required: "musi być wybrany"
 
     attributes:
       user:
@@ -91,7 +103,12 @@ pl:
           company_admin: Administrator firmy
           project_manager: Manager projektu
           user: Użytkownik
-          
+      comment:
+        content: Treść
+        user: Użytkownik
+        commentable: Element komentowany
+        created_at: Data utworzenia
+        updated_at: Data aktualizacji
       project:
         name: Nazwa
         description: Opis

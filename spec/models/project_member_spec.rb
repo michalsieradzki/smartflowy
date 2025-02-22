@@ -10,10 +10,9 @@ RSpec.describe ProjectMember, type: :model do
       user = create(:user, company: company)
       project = create(:project, company: company)
 
-      # Wymuszamy walidację przy pierwszym zapisie
       first = create(:project_member, project: project, user: user)
       duplicate = build(:project_member, project: project, user: user)
-      duplicate.valid? # Ważne: wywołujemy valid? przed sprawdzeniem błędów
+      duplicate.valid?
 
       expect(duplicate).not_to be_valid
       expect(duplicate.errors.full_messages).to include('User jest już członkiem tego projektu')

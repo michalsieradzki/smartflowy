@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_22_141222) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_22_221651) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,6 +39,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_141222) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "content", null: false
+    t.string "commentable_type", null: false
+    t.integer "commentable_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -65,6 +76,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_141222) do
     t.integer "company_id", null: false
     t.index ["company_id"], name: "index_projects_on_company_id"
     t.index ["project_manager_id"], name: "index_projects_on_project_manager_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "todo_list_id", null: false
+    t.integer "position"
+    t.integer "status"
+    t.datetime "due_date"
+    t.integer "assignee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
+    t.index ["todo_list_id"], name: "index_tasks_on_todo_list_id"
+  end
+
+  create_table "todo_lists", force: :cascade do |t|
+    t.string "name"
+    t.integer "project_id", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_todo_lists_on_project_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -101,9 +135,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_141222) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "users"
   add_foreign_key "project_members", "projects"
   add_foreign_key "project_members", "users"
   add_foreign_key "projects", "companies"
   add_foreign_key "projects", "users", column: "project_manager_id"
+  add_foreign_key "tasks", "todo_lists"
+  add_foreign_key "tasks", "users", column: "assignee_id"
+  add_foreign_key "todo_lists", "projects"
   add_foreign_key "users", "companies"
 end
