@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_22_100703) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_22_141222) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -59,31 +59,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_100703) do
   create_table "projects", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.integer "team_id", null: false
     t.integer "project_manager_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_manager_id"], name: "index_projects_on_project_manager_id"
-    t.index ["team_id"], name: "index_projects_on_team_id"
-  end
-
-  create_table "team_memberships", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "team_id", null: false
-    t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["team_id"], name: "index_team_memberships_on_team_id"
-    t.index ["user_id"], name: "index_team_memberships_on_user_id"
-  end
-
-  create_table "teams", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
     t.integer "company_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_teams_on_company_id"
+    t.index ["company_id"], name: "index_projects_on_company_id"
+    t.index ["project_manager_id"], name: "index_projects_on_project_manager_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -122,10 +103,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_100703) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "project_members", "projects"
   add_foreign_key "project_members", "users"
-  add_foreign_key "projects", "teams"
+  add_foreign_key "projects", "companies"
   add_foreign_key "projects", "users", column: "project_manager_id"
-  add_foreign_key "team_memberships", "teams"
-  add_foreign_key "team_memberships", "users"
-  add_foreign_key "teams", "companies"
   add_foreign_key "users", "companies"
 end

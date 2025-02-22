@@ -1,16 +1,21 @@
 RSpec.describe ProjectMember, type: :model do
+  describe 'associations' do
+    it { should belong_to(:project) }
+    it { should belong_to(:user) }
+  end
+
   describe 'validations' do
     it 'validates uniqueness of user per project' do
-      team = create(:team)
-      user = create(:user)
-      create(:team_membership, team: team, user: user)
-      project = create(:project, team: team)
+      company = create(:company)
+      user = create(:user, company: company)
+      project = create(:project, company: company)
 
-      create(:project_member, project: project, user: user)
+      # Wymuszamy walidację przy pierwszym zapisie
+      first = create(:project_member, project: project, user: user)
       duplicate = build(:project_member, project: project, user: user)
-      duplicate.valid?
+      duplicate.valid? # Ważne: wywołujemy valid? przed sprawdzeniem błędów
 
-      # Zmiana sprawdzenia błędu
+      expect(duplicate).not_to be_valid
       expect(duplicate.errors.full_messages).to include('User jest już członkiem tego projektu')
     end
   end

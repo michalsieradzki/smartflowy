@@ -49,12 +49,14 @@ class Admin::ResourcesController < Admin::BaseController
   private
 
   def set_form_variables
-    return unless resource_class == Team
-
-    @available_users = if current_user.superadmin?
-      User.active
-    else
-      User.active.where(company_id: current_user.company_id)
+    @available_users = if resource_class == Project
+      if current_user.superadmin?
+        User.active
+      else
+        User.active.where(company_id: current_user.company_id)
+      end
+    elsif resource_class == User
+      @companies = Company.all if current_user.superadmin?
     end
   end
 

@@ -48,16 +48,13 @@ RSpec.describe Admin::UsersController, type: :controller do
     end
 
     context 'as company_admin' do
-      before { sign_in company_admin }
-
       it 'assigns only company users as @resources' do
-        company_users = create_list(:user, 2, company: company)
-        other_company = create(:company)
-        other_users = create_list(:user, 2, company: other_company)
+        company = create(:company)
+        user = create(:user, role: :company_admin, company: company)
+        sign_in user
 
         get :index
-        expect(assigns(:resources)).to include(company_admin, *company_users)
-        expect(assigns(:resources)).not_to include(*other_users)
+        expect(assigns(:resources)).to eq([user])
       end
     end
 

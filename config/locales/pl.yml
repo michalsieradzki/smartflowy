@@ -91,24 +91,22 @@ pl:
           company_admin: Administrator firmy
           project_manager: Manager projektu
           user: Użytkownik
-      
-      team:
+          
+      project:
         name: Nazwa
         description: Opis
-        company: Firma
-        company_id: Firma
+        project_manager: Kierownik projektu
+        project_manager_id: Kierownik projektu
         users: Członkowie
+        attachments: Załączniki
         created_at: Data utworzenia
         updated_at: Data aktualizacji
-
-      team_membership:
+      
+      project_member:
+        project: Projekt
         user: Użytkownik
-        team: Zespół
-        role: Rola
-        roles:
-          member: Członek
-          leader: Lider
-          admin: Administrator
+        created_at: Data dodania
+        updated_at: Data aktualizacji
 
       company:
         name: Nazwa

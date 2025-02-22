@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :project do
     sequence(:name) { |n| "Projekt #{n}" }
     description { "Opis przykładowego projektu" }
-    association :team
+    association :company
 
     transient do
       without_manager { false }
@@ -10,8 +10,10 @@ FactoryBot.define do
 
     after(:build) do |project, evaluator|
       unless evaluator.without_manager
-        manager = create(:user, role: :project_manager, company: project.team.company)
-        create(:team_membership, team: project.team, user: manager)
+        manager = create(:user,
+          role: :project_manager,
+          company: project.company
+        )
         project.project_manager = manager
       end
     end

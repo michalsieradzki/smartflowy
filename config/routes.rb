@@ -6,13 +6,11 @@ Rails.application.routes.draw do
         patch :disable
       end
     end
-    resources :teams do
-      member do
-        delete :remove_member
-      end
-    end
     resources :versions, only: [:index, :show]
     resources :companies, only: [:index, :new, :create, :edit, :update]
+    resources :projects do
+      delete 'attachments/:attachment_id', to: 'projects#delete_attachment', as: :attachment
+    end
   end
   devise_for :users, controllers: {
     registrations: 'users/registrations'

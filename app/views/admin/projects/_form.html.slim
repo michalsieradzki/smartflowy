@@ -1,0 +1,54 @@
+= form_with model: [:admin, resource], local: true do |f|
+  - if resource.errors.any?
+    .alert.alert-danger
+      h6 Formularz zawiera błędy:
+      ul.mb-0
+        - resource.errors.full_messages.each do |msg|
+          li = msg
+
+  = f.hidden_field :company_id, value: current_user.company_id
+
+  .mb-3
+    = f.label :name, class: 'form-label'
+    = f.text_field :name, class: 'form-control'
+  
+  .mb-3
+    = f.label :description, class: 'form-label'
+    = f.text_area :description, class: 'form-control', rows: 3
+
+  .mb-3
+    = f.label :project_manager_id, class: 'form-label'
+    = f.collection_select :project_manager_id, 
+        @project_managers, 
+        :id, 
+        :full_name,
+        { include_blank: 'Wybierz kierownika projektu' }, 
+        class: 'form-control'
+
+  .mb-3
+    = f.label :user_ids, "Członkowie projektu", class: 'form-label'
+    = f.select :user_ids, 
+        options_for_select(@users.map { |u| [u.full_name, u.id, { 'data-email': u.email, 'data-position': u.position }] }, resource.user_ids),
+        {},
+        multiple: true,
+        class: 'form-control',
+        data: { controller: 'select2' },
+        placeholder: 'Wybierz członków projektu'
+
+  .mb-3
+    = f.label :attachments, 'Załączniki', class: 'form-label'
+    = f.file_field :attachments, multiple: true, class: 'form-control'
+    
+    - if resource.attachments.attached?
+      .mt-2
+        - resource.attachments.each do |attachment|
+          .d-flex.align-items-center.mb-2
+            = link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: :attachment)
+            = link_to admin_project_attachment_path(resource, attachment), 
+                data: { turbo_method: :delete, turbo_confirm: 'Czy na pewno?' },
+                class: 'btn btn-sm btn-outline-danger ms-2' do
+              i.bi.bi-trash
+
+  .text-end.mt-3
+    = link_to 'Anuluj', admin_projects_path, class: 'btn btn-link'
+    = f.submit 'Zapisz', class: 'btn btn-primary'

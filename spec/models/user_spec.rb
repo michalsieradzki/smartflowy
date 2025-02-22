@@ -10,8 +10,10 @@ RSpec.describe User, type: :model do
 
   describe 'associations' do
     it { should belong_to(:company) }
-    it { should have_many(:team_memberships) }
-    it { should have_many(:teams).through(:team_memberships) }
+    it { should have_many(:managed_projects).class_name('Project') }
+    it { should have_many(:project_members) }
+    it { should have_many(:projects).through(:project_members) }
+
   end
 
   describe 'enums' do
