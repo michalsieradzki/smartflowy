@@ -39,6 +39,7 @@ pl:
       user:
         email: Email
         password: Hasło
+        current_password: Aktualne hasło
         password_confirmation: Potwierdzenie hasła
         first_name: Imię
         last_name: Nazwisko
@@ -162,21 +163,6 @@ pl:
       not_saved:
         one: '%{resource} nie został zapisany z powodu błędu:'
         other: '%{resource} nie został zapisany z powodu następujących błędów:'
-
-  devise:
-    sessions:
-      signed_in: Zalogowano pomyślnie.
-      signed_out: Wylogowano pomyślnie.
-    passwords:
-      send_instructions: Instrukcja zmiany hasła zostanie wysłana na podany adres email.
-      updated: Hasło zostało zmienione. Zostałeś automatycznie zalogowany.
-    registrations:
-      signed_up: Rejestracja zakończona pomyślnie.
-      updated: Konto zostało zaktualizowane.
-      destroyed: Konto zostało usunięte.
-    confirmations:
-      send_instructions: Instrukcja aktywacji konta została wysłana na podany adres email.
-      confirmed: Konto zostało aktywowane.
   ransack:
     asc: rosnąco
     desc: malejąco

@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     resources :versions, only: [:index, :show]
     resources :companies, only: [:index, :new, :create, :edit, :update]
   end
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'users/registrations'
+  }
   root 'pages#dashboard'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

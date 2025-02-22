@@ -1,0 +1,64 @@
+pl:
+  devise:
+    confirmations:
+      confirmed: "Twój adres email został pomyślnie potwierdzony."
+      send_instructions: "Otrzymasz email z instrukcjami jak potwierdzić swój adres email w ciągu kilku minut."
+      send_paranoid_instructions: "Jeśli Twój adres email istnieje w naszej bazie danych, otrzymasz email z instrukcjami jak potwierdzić swój adres email w ciągu kilku minut."
+    failure:
+      already_authenticated: "Jesteś już zalogowany."
+      inactive: "Twoje konto nie zostało jeszcze aktywowane."
+      invalid: "Nieprawidłowy %{authentication_keys} lub hasło."
+      locked: "Twoje konto jest zablokowane."
+      last_attempt: "Masz jeszcze jedną próbę zanim Twoje konto zostanie zablokowane."
+      not_found_in_database: "Nieprawidłowy %{authentication_keys} lub hasło."
+      timeout: "Twoja sesja wygasła. Zaloguj się ponownie aby kontynuować."
+      unauthenticated: "Musisz się zalogować lub zarejestrować przed kontynuowaniem."
+      unconfirmed: "Musisz potwierdzić swój adres email przed kontynuowaniem."
+    mailer:
+      confirmation_instructions:
+        subject: "Instrukcja potwierdzenia konta"
+      reset_password_instructions:
+        subject: "Instrukcja zresetowania hasła"
+      unlock_instructions:
+        subject: "Instrukcja odblokowania konta"
+      email_changed:
+        subject: "Email zmieniony"
+      password_change:
+        subject: "Hasło zmienione"
+    omniauth_callbacks:
+      failure: "Nie udało się zautoryzować przez %{kind} z powodu \"%{reason}\"."
+      success: "Pomyślnie zautoryzowano przez %{kind}."
+    passwords:
+      no_token: "Nie możesz dostać się do tej strony bez otrzymania emaila z instrukcjami resetowania hasła."
+      send_instructions: "Otrzymasz email z instrukcjami jak zresetować swoje hasło w ciągu kilku minut."
+      send_paranoid_instructions: "Jeśli Twój adres email istnieje w naszej bazie danych, otrzymasz link do resetowania hasła na swój adres email w ciągu kilku minut."
+      updated: "Twoje hasło zostało zmienione pomyślnie. Jesteś teraz zalogowany."
+      updated_not_active: "Twoje hasło zostało zmienione pomyślnie."
+    registrations:
+      destroyed: "Do widzenia! Twoje konto zostało pomyślnie usunięte. Mamy nadzieję zobaczyć Cię ponownie."
+      signed_up: "Witaj! Zarejestrowałeś się pomyślnie."
+      signed_up_but_inactive: "Zarejestrowałeś się pomyślnie. Niemniej jednak nie możesz się zalogować, ponieważ Twoje konto nie zostało jeszcze aktywowane."
+      signed_up_but_locked: "Zarejestrowałeś się pomyślnie. Niemniej jednak nie możesz się zalogować, ponieważ Twoje konto jest zablokowane."
+      signed_up_but_unconfirmed: "Wiadomość z linkiem potwierdzającym została wysłana na Twój adres email. Proszę kliknij na link aby aktywować konto."
+      update_needs_confirmation: "Zaktualizowałeś swój adres email pomyślnie, ale musimy zweryfikować nowy adres. Sprawdź swojego emaila i kliknij na link potwierdzający aby sfinalizować weryfikację nowego adresu email."
+      updated: "Twoje konto zostało pomyślnie zaktualizowane."
+      updated_but_not_signed_in: "Twoje konto zostało pomyślnie zaktualizowane, ale ponieważ Twoje hasło zostało zmienione, musisz się ponownie zalogować."
+    sessions:
+      signed_in: "Zalogowano pomyślnie."
+      signed_out: "Wylogowano pomyślnie."
+      already_signed_out: "Wylogowano pomyślnie."
+    unlocks:
+      send_instructions: "Otrzymasz email z instrukcjami jak odblokować swoje konto w ciągu kilku minut."
+      send_paranoid_instructions: "Jeśli Twoje konto istnieje, otrzymasz email z instrukcjami jak je odblokować w ciągu kilku minut."
+      unlocked: "Twoje konto zostało pomyślnie odblokowane. Zaloguj się aby kontynuować."
+  errors:
+    messages:
+      already_confirmed: "już został potwierdzony, proszę spróbować się zalogować"
+      confirmation_period_expired: "musi zostać potwierdzony w ciągu %{period}, poproś o nowy"
+      expired: "wygasł, poproś o nowy"
+      not_found: "nie znaleziono"
+      not_locked: "nie był zablokowany"
+      not_saved:
+        one: "%{resource} nie został zapisany z powodu błędu:"
+        other: "%{resource} nie został zapisany z powodu następujących błędów:"
+      blank: "nie może być pusty"
