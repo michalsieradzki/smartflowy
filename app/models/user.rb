@@ -6,6 +6,9 @@ class User < ApplicationRecord
   belongs_to :company
   has_many :team_memberships, dependent: :destroy
   has_many :teams, through: :team_memberships
+  has_many :managed_projects, class_name: 'Project', foreign_key: 'project_manager_id'
+  has_many :project_members
+  has_many :projects, through: :project_members
 
   enum :role, {
     superadmin: 0,
