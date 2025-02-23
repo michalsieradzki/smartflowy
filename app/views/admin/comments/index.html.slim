@@ -1,0 +1,51 @@
+= content_for :title, t('.title')
+
+.card
+  .card-header.d-flex.justify-content-between.align-items-center
+    h5.card-title.mb-0 = t('.title')
+
+  .card-body
+    = search_form_for [:admin, @q], class: 'mb-4' do |f|
+      .row.g-3
+        .col-md-6
+          = f.label :content_cont, class: 'form-label'
+          = f.search_field :content_cont, class: 'form-control'
+        
+        .col-md-3
+          = f.label :user_id_eq, class: 'form-label'
+          = f.collection_select :user_id_eq, 
+            User.all, 
+            :id, 
+            :full_name, 
+            { include_blank: true }, 
+            class: 'form-select'
+            
+        .col-12
+          = f.submit t('admin.shared.filter'), class: 'btn btn-primary me-2'
+          = link_to t('admin.shared.clear_filters'), admin_comments_path, class: 'btn btn-outline-secondary'
+
+    .table-responsive
+      table.table
+        thead
+          tr
+            th = Comment.human_attribute_name(:content)
+            th = Comment.human_attribute_name(:user)
+            th = Comment.human_attribute_name(:commentable)
+            th = sort_link(@q, :created_at)
+            th
+        tbody
+          - @resources.each do |comment|
+            tr
+              td = truncate(comment.content, length: 100)
+              td = comment.user.full_name
+              td.small = comment_commentable_link(comment)
+              td = l(comment.created_at, format: :short)
+              td.text-end
+                = link_to admin_comment_path(comment), 
+                    data: { turbo_method: :delete, turbo_confirm: t('admin.shared.are_you_sure') },
+                    class: 'btn btn-sm btn-outline-danger' do
+                  i.bi.bi-trash
+                  =< t('admin.shared.delete')
+
+    .d-flex.justify-content-center
+      = paginate @resources

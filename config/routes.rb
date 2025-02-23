@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     resources :projects do
       delete 'attachments/:attachment_id', to: 'projects#delete_attachment', as: :attachment
     end
+    resources :todo_lists
+    resources :tasks
+    resources :comments, only: [:index, :destroy]
   end
   devise_for :users, controllers: {
     registrations: 'users/registrations'

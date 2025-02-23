@@ -42,12 +42,6 @@ module Admin::ResourcesHelper
           collection: User.roles.map { |k,v| [User.human_attribute_name(k), v] } },
         { attribute: :created_at, type: :date_range, width: '3' }
       ]
-    when 'Team'
-      [
-        { attribute: :name_cont, type: :string, width: '3' },
-        { attribute: :description_cont, type: :string, width: '4' },
-        { attribute: :created_at, type: :date_range, width: '3' }
-      ]
     when 'PaperTrail::Version'
       [
         { attribute: :item_type_eq, type: :select, width: '2',

@@ -16,4 +16,7 @@ class Admin::UsersController < Admin::ResourcesController
 
     params.require(:user).permit(permitted_params)
   end
+  def set_form_variables
+    @companies = Company.all if current_user.superadmin?
+  end
 end

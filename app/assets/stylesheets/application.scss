@@ -2,7 +2,7 @@ $primary: #A31621;
 $secondary: #4E8098;
 $success: #90C2E7;
 $info: #CED3DC;
-$warning: #FCF7F8;
+$warning: #ff7912;
 $danger: #A31621;
 $light: #FCF7F8;
 $dark: #0a3041;
@@ -20,6 +20,17 @@ body{
 }
 .btn, .form-control, .card, .dropdown-menu{
   border-radius: 0;
+}
+.form-control,.form-select, .page-link {
+  border-color: #7a7a7a !important;
+  background-color: $light;
+}
+tr{
+  border-color: $success;
+}
+.btn:focus, .form-control:focus {
+  border-color: #5a5a5a !important; /* Jeszcze ciemniejsza ramka w trybie focus */
+  box-shadow: 0 0 5px rgba(90, 90, 90, 0.5) !important; /* Subtelny cień */
 }
 .btn-sm{
   border:none;

@@ -13,9 +13,16 @@ class Admin::ProjectsController < Admin::ResourcesController
 
   private
 
+
   def set_form_variables
-    @users = current_user.company.users
-    @project_managers = @users.where(role: [:project_manager, :company_admin])
+    if current_user.superadmin?
+      @users = User.active
+      @project_managers = User.where(role: [:project_manager, :company_admin])
+    else
+      @users = User.active.where(company_id: current_user.company_id)
+      @project_managers = User.where(company_id: current_user.company_id)
+                            .where(role: [:project_manager, :company_admin])
+    end
   end
 
   def resource_params

@@ -30,6 +30,18 @@ html
             i.bi.bi-diagram-3.me-2
             | Projekty
         li.nav-item
+          = link_to admin_todo_lists_path, class: "nav-link text-white #{'active' if controller_name == 'todo_lists'}" do
+            i.bi.bi-list-check.me-2
+            | Listy zadań
+        li.nav-item
+          = link_to admin_tasks_path, class: "nav-link text-white #{'active' if controller_name == 'tasks'}" do
+            i.bi.bi-check2-square.me-2
+            | Zadania
+        li.nav-item
+          = link_to admin_comments_path, class: "nav-link text-white #{'active' if controller_name == 'comments'}" do
+            i.bi.bi-chat-dots.me-2
+            | Komentarze
+        li.nav-item
           = link_to admin_versions_path, class: "nav-link text-white #{'active' if controller_name == 'versions'}" do
             i.bi.bi-clock-history.me-2
             | Historia zmian

@@ -22,12 +22,6 @@ pl:
       user:
         one: Użytkownik
         other: Użytkownicy
-      team:
-        one: Zespół
-        other: Zespoły
-      team_membership:
-        one: Członkostwo w zespole
-        other: Członkostwa w zespołach
       company:
         one: Firma
         other: Firmy
@@ -67,6 +61,12 @@ pl:
         user:
           taken: "jest już członkiem tego projektu"
           invalid: "musi należeć do zespołu projektu"
+      task:
+        one: Zadanie
+        other: Zadania
+      todo_list:
+        one: Lista zadań
+        other: Listy zadań
     errors:
       messages:
         record_invalid: "Nieprawidłowy rekord: %{errors}"
@@ -136,6 +136,32 @@ pl:
         whodunnit: Wykonawca
         created_at: Czas
         changes: Zmiany
+      task:
+       name: Nazwa
+       description: Opis
+       todo_list: Lista zadań
+       todo_list_id: Lista zadań
+       position: Pozycja
+       status: Status
+       due_date: Termin wykonania
+       assignee: Wykonawca
+       assignee_id: Wykonawca
+       created_at: Data utworzenia
+       updated_at: Data aktualizacji
+       attachments: Załączniki
+       statuses:
+         pending: "Oczekujące"
+         in_progress: "W trakcie"
+         completed: "Zakończone"
+         on_hold: "Wstrzymane"
+      todo_list:
+       name: Nazwa
+       description: Opis
+       project: Projekt
+       project_id: Projekt
+       position: Pozycja
+       created_at: Data utworzenia
+       updated_at: Data aktualizacji
 
   admin:
     dashboard:
@@ -175,20 +201,44 @@ pl:
       enable:
         success: Użytkownik został aktywowany
 
-    teams:
+    tasks:
       index:
-        title: Zespoły
-        new: Nowy zespół
+        title: Zadania
+        new: Nowe zadanie
       new:
-        title: Nowy zespół
+        title: Nowe zadanie
       edit:
-        title: Edycja zespołu
+        title: Edycja zadania
       create:
-        success: Zespół został utworzony
+        success: Zadanie zostało utworzone
       update:
-        success: Zespół został zaktualizowany
+        success: Zadanie zostało zaktualizowane
       destroy:
-        success: Zespół został usunięty
+        success: Zadanie zostało usunięte
+    todo_lists:
+      index:
+        title: Listy zadań
+        new: Nowa lista
+      new:
+        title: Nowa lista zadań
+      edit:
+        title: Edycja listy zadań
+      create:
+        success: Lista zadań została utworzona
+      update:
+        success: Lista zadań została zaktualizowana
+      destroy:
+        success: Lista zadań została usunięta
+    comments:
+      index:
+        title: Komentarze
+        new: Nowy komentarz
+      new:
+        title: Nowy komentarz
+      create:
+        success: Komentarz został utworzony
+      destroy:
+        success: Komentarz został usunięty
 
     versions:
       index:
@@ -258,3 +308,19 @@ pl:
         description_cont: Opis zawiera
         team_id_eq: Zespół
         project_manager_id_eq: Kierownik projektu
+  enums:
+    task:
+      status:
+        pending: "Oczekujące"
+        completed: "Zakończone"
+        in_progress: "W toku"
+  views:
+    pagination:
+      first: "Pierwsza"
+      last: "Ostatnia"
+      next: "Następna"
+      previous: "Poprzednia"
+      truncate: "..."
+      page_entries_info:
+        single_page: "Wyświetlono %{count} wpis(ów)"
+        multi_page: "Wyświetlono %{first} - %{last} z %{total} wpisów"

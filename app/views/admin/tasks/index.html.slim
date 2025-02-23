@@ -1,0 +1,77 @@
+= content_for :title, t('.title')
+
+.card
+  .card-header.d-flex.justify-content-between.align-items-center
+    h5.card-title.mb-0 = t('.title')
+    = link_to t('.new'), new_admin_task_path, class: 'btn btn-primary'
+
+  .card-body
+    = search_form_for [:admin, @q], class: 'mb-4' do |f|
+      .row.g-3
+        .col-md-3
+          = f.label :name_cont, class: 'form-label'
+          = f.search_field :name_cont, class: 'form-control'
+        
+        .col-md-3
+          = f.label :todo_list_id_eq, class: 'form-label'
+          = f.collection_select :todo_list_id_eq, 
+            @todo_lists, 
+            :id, 
+            :name, 
+            { include_blank: true }, 
+            class: 'form-select'
+            
+        .col-md-3
+          = f.label :status_eq, class: 'form-label'
+          = f.select :status_eq, 
+            Task.statuses.map { |k, v| [t("activerecord.attributes.task.statuses.#{k}"), v] },
+            { include_blank: true },
+            class: 'form-select'
+
+        .col-md-3
+          = f.label :assignee_id_eq, class: 'form-label'
+          = f.collection_select :assignee_id_eq,
+            @users,
+            :id,
+            :full_name,
+            { include_blank: true },
+            class: 'form-select'
+            
+        .col-12
+          = f.submit t('admin.shared.filter'), class: 'btn btn-primary me-2'
+          = link_to t('admin.shared.clear_filters'), admin_tasks_path, class: 'btn btn-outline-secondary'
+
+    .table-responsive
+      table.table
+        thead
+          tr
+            th = sort_link(@q, :name)
+            th = Task.human_attribute_name(:todo_list)
+            th = sort_link(@q, :status)
+            th = Task.human_attribute_name(:assignee)
+            th = sort_link(@q, :due_date)
+            th = sort_link(@q, :created_at)
+            th
+        tbody
+          - @resources.each do |task|
+            tr
+              td = task.name
+              td = task.todo_list.name
+              td
+                span class="badge bg-#{task_status_color(task.status)}"
+                  = t("activerecord.attributes.task.statuses.#{task.status}")
+              td = task.assignee&.full_name
+              td = l(task.due_date, format: :short) if task.due_date
+              td = l(task.created_at, format: :short)
+              td.text-end
+                = link_to edit_admin_task_path(task), class: 'btn btn-sm btn-outline-primary me-2' do
+                  i.bi.bi-pencil
+                  =< t('admin.shared.edit')
+                = link_to admin_task_path(task), 
+                    data: { turbo_method: :delete, turbo_confirm: t('admin.shared.are_you_sure') },
+                    class: 'btn btn-sm btn-outline-danger' do
+                  i.bi.bi-trash
+                  =< t('admin.shared.delete')
+
+    .d-flex.justify-content-center
+      = paginate @resources

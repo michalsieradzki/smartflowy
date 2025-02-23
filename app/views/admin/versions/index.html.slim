@@ -22,7 +22,12 @@
             td
               span class="badge bg-#{version_badge_class(version.event)}"
                 = t("versions.events.#{version.event}")
-            td = render "changes", version: version
+            td
+              = format_changes(version.changeset) if version.event == 'update'
+              - if version.event == 'create'
+                | Utworzono nowy obiekt
+              - elsif version.event == 'destroy'
+                | Usunięto obiekt
             td = version.whodunnit ? (User.find_by(id: version.whodunnit)&.full_name || 'Usunięty użytkownik') : 'System'
     
     .mt-3
