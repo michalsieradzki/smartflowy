@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   root 'pages#dashboard'
 
   # Dostęp użytkownika do projektów i zadań
-  resources :projects, only: [:index, :show] do
+  resources :projects, only: [:index, :show, :edit, :update] do
     resources :todo_lists, only: [:show, :new, :create]
   end
 
@@ -43,6 +43,11 @@ Rails.application.routes.draw do
       patch :change_status
     end
     resources :comments, only: [:create, :destroy]
+  end
+  resources :kanban, only: [:index] do
+    collection do
+      post :update_status
+    end
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

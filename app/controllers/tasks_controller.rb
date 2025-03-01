@@ -10,7 +10,13 @@ class TasksController < ApplicationController
   def show
     @comments = @task.comments.includes(:user).order(created_at: :desc)
     @comment = Comment.new
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
+
   def new
     @project = Project.find(params[:project_id])
     @todo_list = TodoList.find(params[:todo_list_id])
@@ -42,23 +48,35 @@ class TasksController < ApplicationController
     @project_members = @project.users
   end
 
-
-
   def update
     if @task.update(task_params)
-      redirect_to @task, notice: "Zadanie zostało zaktualizowane"
+      respond_to do |format|
+        format.html { redirect_to @task, notice: "Zadanie zostało zaktualizowane" }
+        format.json { render json: { success: true } }
+      end
     else
-      @comments = @task.comments.includes(:user).order(created_at: :desc)
-      @comment = Comment.new
-      render :show, status: :unprocessable_entity
+      respond_to do |format|
+        format.html do
+          @comments = @task.comments.includes(:user).order(created_at: :desc)
+          @comment = Comment.new
+          render :show, status: :unprocessable_entity
+        end
+        format.json { render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
   end
 
   def change_status
     if @task.update(status: params[:status])
-      redirect_to @task, notice: "Status zadania został zmieniony"
+      respond_to do |format|
+        format.html { redirect_to @task, notice: "Status zadania został zmieniony" }
+        format.json { render json: { success: true } }
+      end
     else
-      redirect_to @task, alert: "Nie udało się zmienić statusu zadania"
+      respond_to do |format|
+        format.html { redirect_to @task, alert: "Nie udało się zmienić statusu zadania" }
+        format.json { render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
   end
 

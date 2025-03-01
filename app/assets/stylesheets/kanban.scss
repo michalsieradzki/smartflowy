@@ -1,0 +1,81 @@
+.kanban-board {
+  overflow-x: auto;
+}
+
+.kanban-column {
+  height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-tasks-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.task-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #ccc;
+}
+
+.task-card[data-status="pending"] {
+  border-left-color: #6c757d;
+}
+
+.task-card[data-status="in_progress"] {
+  border-left-color: #2B6CB0;
+}
+
+.task-card[data-status="on_hold"] {
+  border-left-color: #F6AD55;
+}
+
+.task-card[data-status="completed"] {
+  border-left-color: #48BB78;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-card.draggable {
+  cursor: grab;
+}
+
+.task-card.draggable:hover .drag-handle {
+  opacity: 1 !important;
+}
+
+.task-card.not-draggable {
+  position: relative;
+}
+
+.task-card.not-draggable::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 0 0 0 4px;
+}
+
+.card-header.bg-danger small.fw-bold {
+  color: white !important;
+}
+
+.task-card.dragging {
+  opacity: 0.5;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Dla drag & drop highlight */
+.kanban-tasks-container.highlight {
+  background-color: rgba(0, 123, 255, 0.1);
+  border: 2px dashed #2B6CB0;
+}

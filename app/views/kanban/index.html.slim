@@ -1,0 +1,95 @@
+.container-fluid.mt-4
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1 Tablica Kanban
+    .d-flex.align-items-center
+      = form_tag kanban_index_path, method: :get, class: 'me-2' do
+        .input-group
+          = select_tag :project_id, 
+                      options_from_collection_for_select(@projects, :id, :name, params[:project_id]), 
+                      include_blank: "Wszystkie projekty", 
+                      class: 'form-select', 
+                      data: { controller: 'select2' },
+                      onchange: 'this.form.submit()'
+          - if params[:project_id].present?
+            .input-group-append
+              = link_to kanban_index_path, class: 'btn btn-outline-secondary' do
+                i.bi.bi-x-circle
+      = link_to projects_path, class: 'btn btn-outline-primary' do
+        i.bi.bi-arrow-left
+        |  Projekty
+
+  .kanban-board
+    .row.g-4 data-controller="drag-tasks"
+      // Kolumna: Oczekujące
+      .col-lg-3
+        .card.kanban-column data-status="pending"
+          .card-header.bg-secondary.text-white
+            .d-flex.justify-content-between.align-items-center
+              h5.mb-0
+                i.bi.bi-hourglass.me-2
+                | Oczekujące
+              span.badge.bg-light.text-dark = @tasks_by_status['pending'].count
+          .card-body.kanban-tasks-container
+            - if @tasks_by_status['pending'].any?
+              - @tasks_by_status['pending'].each do |task|
+                = render 'task_card', task: task
+            - else
+              p.text-muted.text-center.py-3 Brak oczekujących zadań
+      
+      // Kolumna: W trakcie
+      .col-lg-3
+        .card.kanban-column data-status="in_progress"
+          .card-header.bg-primary.text-white
+            .d-flex.justify-content-between.align-items-center
+              h5.mb-0
+                i.bi.bi-play-fill.me-2
+                | W trakcie
+              span.badge.bg-light.text-dark = @tasks_by_status['in_progress'].count
+          .card-body.kanban-tasks-container
+            - if @tasks_by_status['in_progress'].any?
+              - @tasks_by_status['in_progress'].each do |task|
+                = render 'task_card', task: task
+            - else
+              p.text-muted.text-center.py-3 Brak zadań w trakcie realizacji
+      
+      .col-lg-3
+        .card.kanban-column data-status="on_hold"
+          .card-header.bg-warning.text-dark
+            .d-flex.justify-content-between.align-items-center
+              h5.mb-0
+                i.bi.bi-pause-fill.me-2
+                | Wstrzymane
+              span.badge.bg-light.text-dark = @tasks_by_status['on_hold'].count
+          .card-body.kanban-tasks-container
+            - if @tasks_by_status['on_hold'].any?
+              - @tasks_by_status['on_hold'].each do |task|
+                = render 'task_card', task: task
+            - else
+              p.text-muted.text-center.py-3 Brak wstrzymanych zadań
+      
+      .col-lg-3
+        .card.kanban-column data-status="completed"
+          .card-header.bg-success.text-white
+            .d-flex.justify-content-between.align-items-center
+              h5.mb-0
+                i.bi.bi-check-circle-fill.me-2
+                | Zakończone
+              span.badge.bg-light.text-dark = @tasks_by_status['completed'].count
+          .card-body.kanban-tasks-container
+            - if @tasks_by_status['completed'].any?
+              - @tasks_by_status['completed'].each do |task|
+                = render 'task_card', task: task
+            - else
+              p.text-muted.text-center.py-3 Brak zakończonych zadań
+
+#task-modal.modal.fade tabindex="-1" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5.modal-title Szczegóły zadania
+        button.btn-close type="button" data-bs-dismiss="modal" aria-label="Close"
+      .modal-body
+        #task-details Ładowanie...
+      .modal-footer
+        button.btn.btn-secondary type="button" data-bs-dismiss="modal" Zamknij
+        a#task-details-link.btn.btn-primary href="#" Pełne szczegóły

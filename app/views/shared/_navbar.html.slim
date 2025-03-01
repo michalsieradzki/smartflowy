@@ -18,6 +18,10 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.mb-4
         li.nav-item
           = link_to "Projekty", projects_path, class: "nav-link #{controller_name == 'projects' ? 'active' : ''}"
         li.nav-item
+          = link_to kanban_index_path, class: "nav-link #{controller_name == 'kanban' ? 'active' : ''}" do
+            i.bi.bi-kanban.me-2
+            | Tablica Kanban
+        li.nav-item
           = link_to "Moje zadania", tasks_path, class: "nav-link #{controller_name == 'tasks' && action_name == 'index' ? 'active' : ''}"
       
       ul.navbar-nav
