@@ -1,3 +1,4 @@
+# config/routes.rb
 Rails.application.routes.draw do
   namespace :admin do
     root to: 'dashboard#index'
@@ -15,20 +16,34 @@ Rails.application.routes.draw do
     resources :tasks
     resources :comments, only: [:index, :destroy]
   end
+
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
+
+  # Dashboard dla zalogowanych użytkowników
+  authenticated :user do
+    root to: 'dashboard#index', as: :authenticated_root
+  end
+
+  # Publiczna strona główna dla niezalogowanych
   root 'pages#dashboard'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Dostęp użytkownika do projektów i zadań
+  resources :projects, only: [:index, :show] do
+    resources :todo_lists, only: [:show, :new, :create]
+  end
+
+  resources :todo_lists, only: [:show] do
+    resources :tasks, only: [:new, :create]
+  end
+
+  resources :tasks, only: [:index, :show, :update, :edit] do
+    member do
+      patch :change_status
+    end
+    resources :comments, only: [:create, :destroy]
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end

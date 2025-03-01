@@ -1,0 +1,76 @@
+.container.mt-4
+  h1.mb-4 Moje zadania
+  
+  .card.mb-4
+    .card-header
+      | Filtruj zadania
+    
+    .card-body
+      = search_form_for @q do |f|
+        .row.g-3
+          .col-md-4
+            = f.label :name_cont, "Nazwa zawiera", class: "form-label"
+            = f.search_field :name_cont, class: "form-control"
+          
+          .col-md-4
+            = f.label :status_eq, "Status", class: "form-label"
+            = f.select :status_eq, 
+                Task.statuses.map { |k, v| [t("activerecord.attributes.task.statuses.#{k}"), v] },
+                { include_blank: "Wszystkie" },
+                class: "form-select"
+          
+          .col-md-4
+            = f.label :due_date_lteq, "Termin do", class: "form-label"
+            = f.date_field :due_date_lteq, class: "form-control"
+          
+          .col-12
+            = f.submit "Filtruj", class: "btn btn-primary me-2"
+            = link_to "Wyczyść", tasks_path, class: "btn btn-outline-secondary"
+
+  - if @tasks.any?
+    .table-responsive
+      table.table.table-hover
+        thead
+          tr
+            th = sort_link(@q, :name, "Nazwa")
+            th Projekt / Lista
+            th = sort_link(@q, :status, "Status")
+            th = sort_link(@q, :due_date, "Termin")
+            th Akcje
+        tbody
+          - @tasks.each do |task|
+            tr
+              td = link_to task.name, task_path(task)
+              td = "#{task.todo_list.project.name} / #{task.todo_list.name}"
+              td
+                span.badge class="bg-#{task_status_color(task.status)}"
+                  = t("activerecord.attributes.task.statuses.#{task.status}")
+              td
+                - if task.due_date
+                  - if task.due_date < Date.today
+                    span.text-danger
+                      i.bi.bi-exclamation-circle
+                      =< l(task.due_date, format: :short)
+                  - elsif task.due_date <= Date.today + 2.days
+                    span.text-warning
+                      i.bi.bi-clock
+                      =< l(task.due_date, format: :short)
+                  - else
+                    = l(task.due_date, format: :short)
+              td
+                .btn-group
+                  = link_to "Szczegóły", task_path(task), class: "btn btn-sm btn-outline-primary"
+                  = button_to change_status_task_path(task, status: task.completed? ? :pending : :completed), 
+                      method: :patch,
+                      class: "btn btn-sm #{task.completed? ? 'btn-outline-warning' : 'btn-outline-success'}",
+                      form: { style: "display: inline-block;" } do
+                    - if task.completed?
+                      i.bi.bi-arrow-repeat
+                      |  Resetuj
+                    - else
+                      i.bi.bi-check-lg
+                      |  Wykonane
+
+    = paginate @tasks
+  - else
+    p.text-muted Nie masz przypisanych zadań spełniających kryteria

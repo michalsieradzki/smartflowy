@@ -1,0 +1,54 @@
+.container.mt-4
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1 Nowe zadanie
+    = link_to "Wróć do projektu", project_path(@project), class: "btn btn-outline-primary"
+  
+  .card
+    .card-header
+      | Projekt: #{@project.name} / Lista: #{@todo_list.name}
+    
+    .card-body
+      = form_with model: [@todo_list, @task], local: true do |f|
+        - if @task.errors.any?
+          .alert.alert-danger
+            h5 = "#{pluralize(@task.errors.count, 'błąd')}"
+            ul
+              - @task.errors.full_messages.each do |message|
+                li = message
+        
+        .mb-3
+          = f.label :name, "Nazwa zadania", class: "form-label"
+          = f.text_field :name, class: "form-control", required: true
+        
+        .mb-3
+          = f.label :description, "Opis zadania", class: "form-label"
+          = f.text_area :description, rows: 5, class: "form-control"
+        
+        .row.mb-3
+          .col-md-6
+            = f.label :status, "Status", class: "form-label"
+            = f.select :status, 
+                Task.statuses.keys.map { |s| [t("activerecord.attributes.task.statuses.#{s}"), s] },
+                { include_blank: false },
+                class: "form-select"
+          
+          .col-md-6
+            = f.label :assignee_id, "Przypisz do", class: "form-label"
+            = f.collection_select :assignee_id,
+                @project_members,
+                :id,
+                :full_name,
+                { include_blank: "Wybierz użytkownika" },
+                class: "form-select"
+        
+        .row.mb-3
+          .col-md-6
+            = f.label :due_date, "Termin wykonania", class: "form-label"
+            = f.date_field :due_date, class: "form-control"
+          
+          .col-md-6
+            = f.label :position, "Pozycja na liście", class: "form-label"
+            = f.number_field :position, class: "form-control", min: 1
+        
+        .text-end
+          = f.submit "Utwórz zadanie", class: "btn btn-primary"

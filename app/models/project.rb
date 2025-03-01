@@ -20,6 +20,14 @@ class Project < ApplicationRecord
     %w[company project_manager project_members users]
   end
 
+  def progress_percentage
+    total_tasks = tasks.count
+    return 0 if total_tasks == 0
+
+    completed_tasks = tasks.where(status: :completed).count
+    (completed_tasks.to_f / total_tasks * 100).round
+  end
+
   private
 
   def project_manager_belongs_to_company

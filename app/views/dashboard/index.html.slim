@@ -1,0 +1,120 @@
+.container.mt-4
+  h1.mb-4
+    | Dashboard
+    small.text-muted.ms-2 Witaj, #{current_user.full_name}
+
+  .row
+    .col-md-6.col-lg-3.mb-4
+      .card.border-primary.h-100
+        .card-body.text-center
+          h5.card-title Moje zadania
+          .display-4 = @my_tasks.count
+          p.card-text Do wykonania
+    
+    .col-md-6.col-lg-3.mb-4
+      .card.border-success.h-100
+        .card-body.text-center
+          h5.card-title Ukończone
+          .display-4 = @tasks_by_status['completed'] || 0
+          p.card-text Zadania zakończone
+    
+    .col-md-6.col-lg-3.mb-4
+      .card.border-warning.h-100
+        .card-body.text-center
+          h5.card-title Deadlines
+          .display-4 = @upcoming_deadlines.count
+          p.card-text W ciągu 7 dni
+    
+    .col-md-6.col-lg-3.mb-4
+      .card.border-info.h-100
+        .card-body.text-center
+          h5.card-title Projekty
+          .display-4 = @my_projects.count
+          p.card-text Aktywne projekty
+
+  - if current_user.project_manager? || current_user.company_admin?
+    .row.mb-4
+      .col-12
+        .card
+          .card-header.d-flex.justify-content-between.align-items-center
+            h5.card-title.mb-0 Zarządzane projekty
+            = link_to "Zobacz wszystkie", projects_path, class: "btn btn-sm btn-outline-primary"
+          
+          .card-body
+            - if @managed_projects.present?
+              .table-responsive
+                table.table
+                  thead
+                    tr
+                      th Nazwa
+                      th Członkowie
+                      th Zadania
+                      th Postęp
+                  tbody
+                    - @managed_projects.each do |project|
+                      tr
+                        td = link_to project.name, project_path(project)
+                        td = project.users.count
+                        td
+                          - task_count = project.tasks.count
+                          - completed_count = project.tasks.where(status: :completed).count
+                          | #{completed_count}/#{task_count}
+                        td
+                          - progress = task_count > 0 ? (completed_count.to_f / task_count * 100).round : 0
+                          .progress
+                            .progress-bar role="progressbar" style="width: #{progress}%;" aria-valuenow="#{progress}" aria-valuemin="0" aria-valuemax="100" #{progress}%
+            - else
+              p.text-muted Nie zarządzasz jeszcze żadnymi projektami
+
+  .row
+    .col-md-6.mb-4
+      .card
+        .card-header.d-flex.justify-content-between.align-items-center
+          h5.card-title.mb-0 Moje projekty
+          = link_to "Zobacz wszystkie", projects_path, class: "btn btn-sm btn-outline-primary"
+        
+        .card-body
+          - if @my_projects.present?
+            .list-group
+              - @my_projects.each do |project|
+                = link_to project_path(project), class: "list-group-item list-group-item-action"
+                  .d-flex.w-100.justify-content-between
+                    h6.mb-1 = project.name
+                    small = l(project.created_at, format: :short)
+                  p.mb-1.text-truncate = project.description.present? ? project.description : "Brak opisu"
+                  small
+                    | Kierownik: 
+                    = project.project_manager.full_name
+          - else
+            p.text-muted Nie należysz jeszcze do żadnych projektów
+    
+    .col-md-6.mb-4
+      .card
+        .card-header.d-flex.justify-content-between.align-items-center
+          h5.card-title.mb-0 Moje zadania
+          = link_to "Zobacz wszystkie", tasks_path, class: "btn btn-sm btn-outline-primary"
+        
+        .card-body
+          - if @my_tasks.present?
+            .list-group
+              - @my_tasks.each do |task|
+                .list-group-item.list-group-item-action.flex-column.align-items-start
+                  .d-flex.w-100.justify-content-between
+                    h6.mb-1 = task.name
+                    - if task.due_date
+                      - if task.due_date < Date.today
+                        small.text-danger
+                          i.bi.bi-exclamation-circle
+                          =< l(task.due_date, format: :short)
+                      - elsif task.due_date <= Date.today + 2.days
+                        small.text-warning
+                          i.bi.bi-clock
+                          =< l(task.due_date, format: :short)
+                      - else
+                        small = l(task.due_date, format: :short)
+                  p.mb-1.text-truncate = task.description.present? ? task.description : "Brak opisu"
+                  small
+                    span.badge class="bg-#{task_status_color(task.status)}" = t("activerecord.attributes.task.statuses.#{task.status}")
+                    = " | #{task.todo_list.project.name} / #{task.todo_list.name}"
+          - else
+            p.text-muted Nie masz jeszcze przypisanych zadań

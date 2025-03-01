@@ -1,0 +1,63 @@
+.container.mt-4
+  h1.mb-4 Projekty
+
+  - if current_user.project_manager? || current_user.company_admin?
+    h3.mt-5 Zarządzane projekty
+    
+    - if @managed_projects.present?
+      .row
+        - @managed_projects.each do |project|
+          .col-md-6.col-lg-4.mb-4
+            .card.h-100
+              .card-body
+                h5.card-title = link_to project.name, project_path(project)
+                p.card-text.text-truncate = project.description.present? ? project.description : "Brak opisu"
+                .mb-3
+                  small.text-muted
+                    | Członkowie: 
+                    = project.users.count
+                  br
+                  small.text-muted
+                    | Zadania: 
+                    - task_count = project.tasks.count
+                    - completed_count = project.tasks.where(status: :completed).count
+                    | #{completed_count}/#{task_count}
+                
+                - progress = task_count > 0 ? (completed_count.to_f / task_count * 100).round : 0
+                .progress.mb-3
+                  .progress-bar role="progressbar" style="width: #{progress}%;" aria-valuenow="#{progress}" aria-valuemin="0" aria-valuemax="100" #{progress}%
+              
+              .card-footer.text-muted
+                = l(project.created_at, format: :short)
+                
+      = paginate @managed_projects
+    - else
+      p.text-muted Nie zarządzasz jeszcze żadnymi projektami
+
+  h3.mt-5 Moje projekty
+  
+  - if @projects.present?
+    .row
+      - @projects.each do |project|
+        .col-md-6.col-lg-4.mb-4
+          .card.h-100
+            .card-body
+              h5.card-title = link_to project.name, project_path(project)
+              p.card-text.text-truncate = project.description.present? ? project.description : "Brak opisu"
+              .mb-3
+                small.text-muted
+                  | Kierownik: 
+                  = project.project_manager.full_name
+                br
+                small.text-muted
+                  | Zadania: 
+                  - assigned_tasks = project.tasks.where(assignee_id: current_user.id).count
+                  - assigned_completed = project.tasks.where(assignee_id: current_user.id, status: :completed).count
+                  | #{assigned_completed}/#{assigned_tasks} (przypisane do Ciebie)
+            
+            .card-footer.text-muted
+              = l(project.created_at, format: :short)
+              
+    = paginate @projects
+  - else
+    p.text-muted Nie należysz jeszcze do żadnych projektów

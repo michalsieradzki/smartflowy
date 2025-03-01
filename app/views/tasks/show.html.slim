@@ -1,0 +1,138 @@
+.container.mt-4
+  .d-flex.justify-content-between.align-items-center.mb-4
+    div
+      h1 = @task.name
+      p.text-muted
+        | Projekt: 
+        = link_to @task.todo_list.project.name, project_path(@task.todo_list.project)
+        |  / 
+        = @task.todo_list.name
+    
+    = link_to "Wróć do zadań", tasks_path, class: "btn btn-outline-primary"
+  
+  .row
+    .col-md-8
+      .card.mb-4
+        .card-header.d-flex.justify-content-between.align-items-center
+          | Szczegóły zadania
+          span.badge class="bg-#{task_status_color(@task.status)}" = t("activerecord.attributes.task.statuses.#{@task.status}")
+        
+        .card-body
+          - if @task.description.present?
+            .mb-4
+              h5 Opis
+              = simple_format(@task.description)
+          
+          .row.mb-3
+            .col-md-6
+              p
+                strong Przypisane do: 
+                = @task.assignee&.full_name || "Nie przypisano"
+            
+            .col-md-6
+              p
+                strong Termin: 
+                - if @task.due_date
+                  - if @task.due_date < Date.today
+                    span.text-danger
+                      i.bi.bi-exclamation-circle
+                      =< l(@task.due_date, format: :long)
+                  - elsif @task.due_date <= Date.today + 2.days
+                    span.text-warning
+                      i.bi.bi-clock
+                      =< l(@task.due_date, format: :long)
+                  - else
+                    = l(@task.due_date, format: :long)
+                - else
+                  | Nie określono
+          
+          - if @task.assignee == current_user
+            .d-flex.mt-4
+              = form_with model: @task, local: true, class: "me-2" do |f|
+                = f.hidden_field :status, value: @task.completed? ? "pending" : "completed"
+                = f.submit @task.completed? ? "Oznacz jako oczekujące" : "Oznacz jako wykonane", class: "btn #{@task.completed? ? 'btn-warning' : 'btn-success'}"
+              
+              .dropdown
+                button.btn.btn-outline-secondary.dropdown-toggle type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  | Zmień status
+                ul.dropdown-menu
+                  - Task.statuses.keys.each do |status|
+                    li
+                      = button_to change_status_task_path(@task, status: status), 
+                          method: :patch,
+                          class: "dropdown-item #{'active' if @task.status == status}" do
+                        = t("activerecord.attributes.task.statuses.#{status}")
+      
+      .card.mb-4
+        .card-header
+          | Komentarze (#{@comments.count})
+        
+        .card-body
+          = form_with model: [@task, @comment], local: true, class: "mb-4" do |f|
+            .mb-3
+              = f.label :content, "Twój komentarz", class: "form-label"
+              = f.text_area :content, rows: 3, class: "form-control", required: true, placeholder: "Dodaj komentarz..."
+            
+            = f.submit "Dodaj komentarz", class: "btn btn-primary"
+          
+          - if @comments.any?
+            .list-group
+              - @comments.each do |comment|
+                .list-group-item
+                  .d-flex.justify-content-between
+                    h6
+                      = comment.user.full_name
+                      small.text-muted.ms-2 = l(comment.created_at, format: :short)
+                    
+                    - if comment.user == current_user || current_user.company_admin? || (@task.todo_list.project.project_manager_id == current_user.id)
+                      = button_to task_comment_path(@task, comment), 
+                          method: :delete,
+                          class: "btn btn-sm btn-link text-danger",
+                          form: { style: "display: inline-block;" },
+                          data: { confirm: "Czy na pewno usunąć ten komentarz?" } do
+                        i.bi.bi-trash
+                  
+                  p.mb-0 = comment.content
+          - else
+            p.text-muted Brak komentarzy
+    
+    .col-md-4
+      .card.mb-4
+        .card-header Działania
+        .list-group.list-group-flush
+          = link_to project_path(@task.todo_list.project), class: "list-group-item list-group-item-action"
+            i.bi.bi-folder
+            |  Przejdź do projektu
+          
+          - if can? :update, @task
+            = link_to edit_task_path(@task), class: "list-group-item list-group-item-action"
+              i.bi.bi-pencil
+              |  Edytuj zadanie
+      
+      - if @task.todo_list.project.users.count > 0
+        .card
+          .card-header Członkowie projektu
+          .list-group.list-group-flush
+            - @task.todo_list.project.users.each do |user|
+              .list-group-item
+                = user.full_name
+                - if @task.todo_list.project.project_manager_id == user.id
+                  span.badge.bg-info.ms-2 Kierownik
+                - if @task.assignee_id == user.id
+                  span.badge.bg-success.ms-2 Wykonawca
+
+// Modal do edycji opisu zadania
+#editTaskModal.modal.fade tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_with model: @task, local: true do |f|
+        .modal-header
+          h5#editTaskModalLabel.modal-title Edytuj opis zadania
+          button.btn-close type="button" data-bs-dismiss="modal" aria-label="Close"
+        .modal-body
+          .mb-3
+            = f.label :description, "Opis zadania", class: "form-label"
+            = f.text_area :description, rows: 5, class: "form-control"
+        .modal-footer
+          button.btn.btn-secondary type="button" data-bs-dismiss="modal" Anuluj
+          = f.submit "Zapisz zmiany", class: "btn btn-primary"

@@ -1,0 +1,91 @@
+.container.mt-4
+  .d-flex.justify-content-between.align-items-center.mb-4
+    div
+      h1 = @project.name
+      p.text-muted
+        | Kierownik: 
+        = @project.project_manager.full_name
+    
+    = link_to "Wróć do projektów", projects_path, class: "btn btn-outline-primary"
+  
+  .card.mb-4
+    .card-header Opis projektu
+    .card-body
+      = simple_format(@project.description) if @project.description.present?
+  
+  .d-flex.justify-content-between.align-items-center.mb-3
+    h3 Listy zadań i zadania
+    - if can?(:manage, @project)
+      = link_to new_project_todo_list_path(@project), class: "btn btn-primary"
+        i.bi.bi-plus-lg
+        |  Nowa lista zadań
+
+  - if can?(:manage, @project) && @todo_lists.empty?
+    .alert.alert-info
+      | Ten projekt nie ma jeszcze żadnych list zadań. 
+      = link_to "Dodaj pierwszą listę", new_project_todo_list_path(@project), class: "alert-link"
+  
+  - if @todo_lists.any?
+    .row
+      - @todo_lists.each do |todo_list|
+        .col-md-6.mb-4
+          .card
+            .card-header.bg-primary.text-white.d-flex.justify-content-between.align-items-center
+              = todo_list.name
+              - if can?(:manage, todo_list)
+                button.btn.btn-sm.btn-light data-bs-toggle="modal" data-bs-target="#modal_task_#{todo_list.id}"
+                  i.bi.bi-plus-lg
+                  |  Dodaj zadanie
+            
+            = turbo_frame_tag "new_task_#{todo_list.id}"
+            
+            .list-group.list-group-flush id="tasks_list_#{todo_list.id}"
+              - if todo_list.tasks.any?
+                - todo_list.tasks.each do |task|
+                  = render 'tasks/task', task: task
+              - else
+                .list-group-item.text-muted Brak zadań
+  - else
+    p.text-muted Ten projekt nie ma jeszcze żadnych list zadań
+
+- @todo_lists.each do |todo_list|
+  div id="modal_task_#{todo_list.id}" class="modal fade" tabindex="-1"
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title Nowe zadanie w liście #{todo_list.name}
+          button.btn-close type="button" data-bs-dismiss="modal" aria-label="Close"
+        .modal-body
+          = form_with model: [todo_list, Task.new], local: true do |f|
+            .mb-3
+              = f.label :name, "Nazwa zadania", class: "form-label"
+              = f.text_field :name, class: "form-control", required: true
+            
+            .mb-3
+              = f.label :description, "Opis zadania", class: "form-label"
+              = f.text_area :description, rows: 3, class: "form-control"
+            
+            .row.mb-3
+              .col-md-6
+                = f.label :status, "Status", class: "form-label"
+                = f.select :status, 
+                    Task.statuses.keys.map { |s| [t("activerecord.attributes.task.statuses.#{s}"), s] },
+                    { include_blank: false },
+                    class: "form-select"
+              
+              .col-md-6
+                = f.label :assignee_id, "Przypisz do", class: "form-label"
+                = f.collection_select :assignee_id,
+                    todo_list.project.users,
+                    :id,
+                    :full_name,
+                    { include_blank: "Wybierz użytkownika" },
+                    class: "form-select"
+            
+            .row.mb-3
+              .col-md-6
+                = f.label :due_date, "Termin wykonania", class: "form-label"
+                = f.date_field :due_date, class: "form-control"
+            
+            .text-end
+              = f.submit "Utwórz zadanie", class: "btn btn-primary"

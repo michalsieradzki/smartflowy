@@ -1,0 +1,13 @@
+= link_to task_path(task), class: "list-group-item list-group-item-action"
+  .d-flex.w-100.justify-content-between
+    h6.mb-1 = task.name
+    small
+      span.badge class="bg-#{task_status_color(task.status)}" = t("activerecord.attributes.task.statuses.#{task.status}")
+  - if task.assignee
+    small
+      | Przypisane do: 
+      = task.assignee.full_name
+  - if task.due_date
+    small.d-block
+      | Termin: 
+      = l(task.due_date, format: :short)
