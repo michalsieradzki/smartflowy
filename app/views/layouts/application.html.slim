@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title = content_for(:title) || "Smartflowy"
+    title = content_for(:title) || "SmartFlowy"
     meta name="viewport" content="width=device-width,initial-scale=1"
     meta name="apple-mobile-web-app-capable" content="yes"
     meta name="mobile-web-app-capable" content="yes"
@@ -10,9 +10,6 @@ html
 
     = yield :head
 
-    /! Enable PWA manifest for installable apps
-    /= tag.link rel: "manifest", href: pwa_manifest_path(format: :json)
-
     link rel="icon" href="/icon.png" type="image/png"
     link rel="icon" href="/icon.svg" type="image/svg+xml"
     link rel="apple-touch-icon" href="/icon.png"
@@ -20,12 +17,19 @@ html
     = stylesheet_link_tag :app, "data-turbo-track": "reload"
     = javascript_importmap_tags
 
-  body.d-flex.flex-column.min-vh-100
-    = render 'shared/navbar'
-
-    main.container.flex-shrink-0
-      = render 'shared/flash_messages'
+  body.bg-light
+    .d-flex.flex-column.min-vh-100
+      // Renderuj komponenty nawigacyjne
       
-      = yield
-
-    = render 'shared/footer'
+      = render 'shared/navbar'
+      // Główny kontener - flex sprawia, że sidebar i treść są obok siebie
+      .d-flex.flex-grow-1
+        // Sidebar renderowany osobno
+        = render 'shared/sidebar'
+        
+        // Główna treść
+        main.flex-grow-1.py-3.mt-lg-0.mt-5.pb-5
+          = render 'shared/flash_messages'
+          = yield
+    
+    // Bottom mobile navbar (renderowany w shared/navbar)

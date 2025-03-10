@@ -18,69 +18,72 @@
         i.bi.bi-arrow-left
         |  Projekty
 
-  .kanban-board
-    .row.g-4 data-controller="drag-tasks"
+  .kanban-scroll-hint
+    small
+      i.bi.bi-arrow-left-right.me-1
+      | Przewiń w poziomie, aby zobaczyć wszystkie kolumny
+
+  .kanban-container data-controller="drag-tasks"
+    .kanban-board
       // Kolumna: Oczekujące
-      .col-lg-3
-        .card.kanban-column data-status="pending"
-          .card-header.bg-secondary.text-white
-            .d-flex.justify-content-between.align-items-center
-              h5.mb-0
-                i.bi.bi-hourglass.me-2
-                | Oczekujące
-              span.badge.bg-light.text-dark = @tasks_by_status['pending'].count
-          .card-body.kanban-tasks-container
+      .kanban-column-wrapper
+        .kanban-column data-status="pending"
+          .kanban-column-header.bg-secondary.text-white
+            h5.mb-0
+              i.bi.bi-hourglass.me-2
+              | Oczekujące
+            span.badge.bg-light.text-dark = @tasks_by_status['pending'].count
+          .kanban-tasks-container
             - if @tasks_by_status['pending'].any?
               - @tasks_by_status['pending'].each do |task|
                 = render 'task_card', task: task
             - else
-              p.text-muted.text-center.py-3 Brak oczekujących zadań
+              p.text-muted.text-center.py-3 Brak zadań
       
       // Kolumna: W trakcie
-      .col-lg-3
-        .card.kanban-column data-status="in_progress"
-          .card-header.bg-primary.text-white
-            .d-flex.justify-content-between.align-items-center
-              h5.mb-0
-                i.bi.bi-play-fill.me-2
-                | W trakcie
-              span.badge.bg-light.text-dark = @tasks_by_status['in_progress'].count
-          .card-body.kanban-tasks-container
+      .kanban-column-wrapper
+        .kanban-column data-status="in_progress"
+          .kanban-column-header.bg-primary.text-white
+            h5.mb-0
+              i.bi.bi-play-fill.me-2
+              | W trakcie
+            span.badge.bg-light.text-dark = @tasks_by_status['in_progress'].count
+          .kanban-tasks-container
             - if @tasks_by_status['in_progress'].any?
               - @tasks_by_status['in_progress'].each do |task|
                 = render 'task_card', task: task
             - else
-              p.text-muted.text-center.py-3 Brak zadań w trakcie realizacji
+              p.text-muted.text-center.py-3 Brak zadań
       
-      .col-lg-3
-        .card.kanban-column data-status="on_hold"
-          .card-header.bg-warning.text-dark
-            .d-flex.justify-content-between.align-items-center
-              h5.mb-0
-                i.bi.bi-pause-fill.me-2
-                | Wstrzymane
-              span.badge.bg-light.text-dark = @tasks_by_status['on_hold'].count
-          .card-body.kanban-tasks-container
+      // Kolumna: Wstrzymane
+      .kanban-column-wrapper
+        .kanban-column data-status="on_hold"
+          .kanban-column-header.bg-warning.text-dark
+            h5.mb-0
+              i.bi.bi-pause-fill.me-2
+              | Wstrzymane
+            span.badge.bg-light.text-dark = @tasks_by_status['on_hold'].count
+          .kanban-tasks-container
             - if @tasks_by_status['on_hold'].any?
               - @tasks_by_status['on_hold'].each do |task|
                 = render 'task_card', task: task
             - else
-              p.text-muted.text-center.py-3 Brak wstrzymanych zadań
+              p.text-muted.text-center.py-3 Brak zadań
       
-      .col-lg-3
-        .card.kanban-column data-status="completed"
-          .card-header.bg-success.text-white
-            .d-flex.justify-content-between.align-items-center
-              h5.mb-0
-                i.bi.bi-check-circle-fill.me-2
-                | Zakończone
-              span.badge.bg-light.text-dark = @tasks_by_status['completed'].count
-          .card-body.kanban-tasks-container
+      // Kolumna: Zakończone
+      .kanban-column-wrapper
+        .kanban-column data-status="completed"
+          .kanban-column-header.bg-success.text-white
+            h5.mb-0
+              i.bi.bi-check-circle-fill.me-2
+              | Zakończone
+            span.badge.bg-light.text-dark = @tasks_by_status['completed'].count
+          .kanban-tasks-container
             - if @tasks_by_status['completed'].any?
               - @tasks_by_status['completed'].each do |task|
                 = render 'task_card', task: task
             - else
-              p.text-muted.text-center.py-3 Brak zakończonych zadań
+              p.text-muted.text-center.py-3 Brak zadań
 
 #task-modal.modal.fade tabindex="-1" aria-hidden="true"
   .modal-dialog

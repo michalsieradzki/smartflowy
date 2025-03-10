@@ -1,0 +1,53 @@
+// Sidebar dla dużych ekranów (ukryty na mobilnych)
+.d-none.d-lg-block.bg-dark.text-white
+  .d-flex.flex-column.h-100.p-3
+    // Logo i brand
+    = link_to root_path, class: "d-flex align-items-center mb-3 text-white text-decoration-none"
+      i.bi.bi-box.me-2.fs-4
+      span.fs-4 SmartFlowy
+    
+    hr.text-secondary
+    
+    // Menu nawigacji
+    ul.nav.nav-pills.flex-column.mb-auto
+      li.nav-item
+        = link_to authenticated_root_path, class: "nav-link text-white #{'active' if current_page?(authenticated_root_path)}"
+          i.bi.bi-speedometer2.me-2
+          | Dashboard
+      
+      li.nav-item
+        = link_to projects_path, class: "nav-link text-white #{'active' if controller_name == 'projects'}"
+          i.bi.bi-diagram-3.me-2
+          | Projekty
+      
+      li.nav-item
+        = link_to kanban_index_path, class: "nav-link text-white #{'active' if controller_name == 'kanban'}"
+          i.bi.bi-kanban.me-2
+          | Tablica Kanban
+      
+      li.nav-item
+        = link_to tasks_path, class: "nav-link text-white #{'active' if controller_name == 'tasks' && action_name == 'index'}"
+          i.bi.bi-check2-square.me-2
+          | Moje zadania
+      
+      - if can? :access, :admin_panel
+        li.nav-item
+          = link_to admin_root_path, class: "nav-link text-white #{'active' if request.path.start_with?('/admin')}"
+            i.bi.bi-gear.me-2
+            | Panel Admina
+    
+    hr.text-secondary
+    
+    // Menu użytkownika
+    - if user_signed_in?
+      .dropdown
+        a.d-flex.align-items-center.text-white.text-decoration-none.dropdown-toggle#dropdownUser href="#" data-bs-toggle="dropdown" aria-expanded="false"
+          - avatar_url = "https://ui-avatars.com/api/?name=#{current_user.first_name}+#{current_user.last_name}&background=4FD1C5&color=fff"
+          img.rounded-circle.me-2 src=avatar_url width="32" height="32" alt=current_user.full_name
+          strong = current_user.full_name
+        
+        ul.dropdown-menu.dropdown-menu-dark.text-small.shadow aria-labelledby="dropdownUser"
+          li = link_to "Profil", edit_user_registration_path, class: "dropdown-item"
+          li
+            hr.dropdown-divider
+          li = button_to "Wyloguj", destroy_user_session_path, method: :delete, class: "dropdown-item"

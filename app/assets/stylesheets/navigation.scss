@@ -1,0 +1,159 @@
+.offcanvas-start {
+  width: 200px;
+}
+
+/* Styl dla elementów menu */
+.nav-link {
+  border-radius: 0;
+  padding: 0.7rem 1rem;
+  transition: all 0.2s;
+}
+
+.nav-pills .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #4FD1C5;
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Styl dla dolnego menu mobilnego */
+.fixed-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fixed-bottom a {
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.fixed-bottom a:hover {
+  color: #4FD1C5 !important;
+}
+
+.fixed-bottom a.text-primary,
+.fixed-bottom a.active {
+  color: #4FD1C5 !important;
+  font-weight: 500;
+}
+
+.fixed-bottom small {
+  font-size: 0.7rem;
+}
+
+
+/* Stały sidebar dla widoku desktopowego */
+@media (min-width: 992px) {
+  /* Naprawiamy offcanvas dla desktopa */
+  .offcanvas {
+    visibility: visible;
+    position: relative;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    transform: none;
+  }
+  
+  /* Struktura głównego layoutu */
+  .d-flex.flex-column.min-vh-100 {
+    min-height: 100vh;
+  }
+  
+  /* Zapewniamy stałą szerokość dla sidebara */
+  .d-none.d-lg-block.bg-dark.text-white {
+    flex: 0 0 280px;
+    max-width: 280px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  /* Główna treść przyjmuje pozostałą przestrzeń */
+  .flex-grow-1.py-3.px-4 {
+    width: calc(100% - 280px);
+    margin-left: 0;
+  }
+  
+  body {
+    overflow: auto !important;
+    padding-right: 0 !important;
+  }
+  
+  .container-fluid.p-4 {
+    padding-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  body {
+    padding-bottom: 60px; /* Wysokość dolnego menu */
+  }
+  
+  /* Zapewnienie pełnej wysokości offcanvas */
+  .offcanvas-start, .offcanvas-end {
+    height: 100vh;
+  }
+  
+  /* Dostosowanie paddingu dla contentu */
+  .pt-5.pt-lg-2,
+  main.flex-grow-1 {
+    padding-top: 4.5rem !important;
+  }
+  
+  /* Animacja dla ikon w dolnym menu */
+  .fixed-bottom a i {
+    transition: transform 0.2s;
+  }
+  
+  .fixed-bottom a:hover i,
+  .fixed-bottom a.active i {
+    transform: translateY(-3px);
+  }
+}
+
+/* Styl dla karty użytkownika w bocznym menu */
+.dropdown-toggle::after {
+  margin-left: 0.5em;
+}
+
+/* Style dla avatara użytkownika */
+.rounded-circle {
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Poprawki dla układu flex w głównym kontenerze */
+.d-flex.flex-grow-1 {
+  display: flex !important;
+  min-height: 0;
+}
+
+/* Przyciski offcanvas - lepsze pozycjonowanie */
+.navbar-toggler.border-0 {
+  padding: 0.5rem;
+  font-size: 1.25rem;
+}
+
+/* Naprawienie layoutu strony, aby sidebar i treść były prawidłowo ułożone */
+.d-flex.h-100 {
+  min-height: calc(100vh - 56px); /* 56px to wysokość górnego menu na mobile */
+}
+
+/* Zapewnienie odpowiednich marginesów w głównej treści */
+main.flex-grow-1 {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Zapobieganie "skakaniu" treści przy przewijaniu na mobilnych */
+@media (max-width: 991.98px) {
+  .fixed-bottom {
+    z-index: 1030;
+  }
+  
+  .navbar.fixed-top {
+    z-index: 1031;
+  }
+}

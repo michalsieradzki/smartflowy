@@ -2,8 +2,45 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   connect() {
+    console.log("Kanban controller connected");
+    // Dodaj wskazówkę dotyczącą przewijania dla urządzeń mobilnych
+    this.showScrollHintIfNeeded();
+    // Inicjalizuj drag & drop
     this.initDragAndDrop();
+    // Inicjalizuj karty zadań (eventy kliknięcia)
     this.initTaskCards();
+    // Nasłuchuj na zmiany rozmiaru okna
+    window.addEventListener('resize', this.showScrollHintIfNeeded.bind(this));
+  }
+
+  disconnect() {
+    window.removeEventListener('resize', this.showScrollHintIfNeeded.bind(this));
+  }
+
+  showScrollHintIfNeeded() {
+    const kanbanContainer = document.querySelector('.kanban-container');
+    const scrollHint = document.querySelector('.kanban-scroll-hint');
+    
+    if (!kanbanContainer || !scrollHint) return;
+    
+    // Pokaż wskazówkę tylko jeśli zawartość wymaga przewijania i jesteśmy na małym ekranie
+    const overflowing = kanbanContainer.scrollWidth > kanbanContainer.clientWidth;
+    const isMobile = window.innerWidth < 992;
+    
+    scrollHint.style.display = (overflowing && isMobile) ? 'block' : 'none';
+    
+    // Automatycznie ukryj wskazówkę po 5 sekundach
+    if (overflowing && isMobile) {
+      setTimeout(() => {
+        scrollHint.style.opacity = '0';
+        scrollHint.style.transition = 'opacity 1s ease-out';
+        
+        // Całkowicie usuń po zakończeniu animacji
+        setTimeout(() => {
+          scrollHint.style.display = 'none';
+        }, 1000);
+      }, 5000);
+    }
   }
 
   initDragAndDrop() {
@@ -16,6 +53,10 @@ export default class extends Controller {
       card.setAttribute("draggable", true);
       
       card.addEventListener("dragstart", (e) => {
+        // Unikaj uruchamiania modala podczas rozpoczęcia przeciągania
+        e.stopPropagation();
+        
+        // Dodaj klasę do karty podczas przeciągania
         card.classList.add("dragging");
         e.dataTransfer.setData("text/plain", card.dataset.taskId);
         e.dataTransfer.effectAllowed = "move";
@@ -76,6 +117,11 @@ export default class extends Controller {
   initTaskCards() {
     document.querySelectorAll(".task-card").forEach((card) => {
       card.addEventListener("click", (e) => {
+        // Nie otwieraj modala jeśli kliknięcie nastąpiło podczas przeciągania
+        if (card.classList.contains('dragging')) {
+          return;
+        }
+        
         // Zatrzymujemy propagację, aby nie wywoływać zdarzenia click na kontenerze
         e.stopPropagation();
         
