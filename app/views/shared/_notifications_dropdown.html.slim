@@ -1,0 +1,37 @@
+
+/ Dla wersji mobilnej - przycisk w navbarze
+.position-relative.d-inline-block
+  button.navbar-toggler.border-0 type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications"
+    i.bi.bi-bell
+  - if current_user.unread_notifications_count > 0
+    span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.p-1 = current_user.unread_notifications_count
+
+/ Offcanvas dla powiadomień (tylko mobilne)
+.offcanvas.offcanvas-end.bg-light#offcanvasNotifications tabindex="-1" aria-labelledby="offcanvasNotificationsLabel"
+  .offcanvas-header.bg-primary.text-white
+    h5#offcanvasNotificationsLabel.offcanvas-title Powiadomienia
+    button.btn-close.btn-close-white type="button" data-bs-dismiss="offcanvas" aria-label="Close"
+  
+  .offcanvas-body
+    - if current_user.notifications.recent.any?
+      .list-group.list-group-flush
+        - current_user.notifications.recent.each do |notification|
+          .list-group-item.list-group-item-action class=('bg-light' unless notification.read?)
+            .d-flex.flex-column
+              .fw-bold = notification.message
+              small.text-muted = l(notification.created_at, format: :short)
+              - unless notification.read?
+                = button_to mark_as_read_notification_path(notification), method: :post, class: 'btn btn-sm btn-primary mt-2 w-100' do
+                  i.bi.bi-check-circle.me-1
+                  | Oznacz jako przeczytane
+    - else
+      .text-center.text-muted.p-3
+        i.bi.bi-bell-slash.fs-4.d-block.mb-2
+        p Brak powiadomień
+    
+    .mt-3.text-center
+      = link_to notifications_path, class: "btn btn-outline-primary w-100" do
+        | Zobacz wszystkie powiadomienia
+
+/ Dla wersji desktopowej - umieść to w _sidebar.html.slim
+/ (Zostanie zignorowane w widoku mobilnym ze względu na klasy d-lg-*)

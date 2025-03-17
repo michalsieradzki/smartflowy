@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_22_221651) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_17_064154) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -55,6 +55,35 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_221651) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "notification_settings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.boolean "notify_task_assigned", default: true
+    t.boolean "notify_task_deadline", default: true
+    t.boolean "notify_task_comment", default: true
+    t.boolean "notify_task_status_changed", default: true
+    t.boolean "notify_project_assigned", default: true
+    t.boolean "notify_project_update", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notification_settings_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "recipient_id"
+    t.integer "actor_id"
+    t.string "notifiable_type"
+    t.integer "notifiable_id"
+    t.string "message"
+    t.integer "notification_type"
+    t.datetime "read_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actor_id"], name: "index_notifications_on_actor_id"
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
+    t.index ["recipient_id", "read_at"], name: "index_notifications_on_recipient_id_and_read_at"
+    t.index ["recipient_id"], name: "index_notifications_on_recipient_id"
   end
 
   create_table "project_members", force: :cascade do |t|
@@ -136,6 +165,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_221651) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "users"
+  add_foreign_key "notification_settings", "users"
+  add_foreign_key "notifications", "users", column: "actor_id"
+  add_foreign_key "notifications", "users", column: "recipient_id"
   add_foreign_key "project_members", "projects"
   add_foreign_key "project_members", "users"
   add_foreign_key "projects", "companies"

@@ -35,6 +35,10 @@ class TasksController < ApplicationController
     @task = @todo_list.tasks.build(task_params)
 
     if @task.save
+      if @task.assignee.present?
+        Notification.notify_task_assigned(@task, current_user)
+      end
+
       redirect_to project_path(@todo_list.project), notice: "Zadanie zostało utworzone"
     else
       @project = @todo_list.project
@@ -49,7 +53,18 @@ class TasksController < ApplicationController
   end
 
   def update
+    previous_assignee_id = @task.assignee_id
+    previous_status = @task.status
+
     if @task.update(task_params)
+      if previous_assignee_id != @task.assignee_id && @task.assignee.present?
+        Notification.notify_task_assigned(@task, current_user)
+      end
+
+      if previous_status != @task.status
+        Notification.notify_task_status_changed(@task, current_user)
+      end
+
       respond_to do |format|
         format.html { redirect_to @task, notice: "Zadanie zostało zaktualizowane" }
         format.json { render json: { success: true } }
@@ -68,6 +83,8 @@ class TasksController < ApplicationController
 
   def change_status
     if @task.update(status: params[:status])
+      Notification.notify_task_status_changed(@task, current_user)
+
       respond_to do |format|
         format.html { redirect_to @task, notice: "Status zadania został zmieniony" }
         format.json { render json: { success: true } }

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :managed_projects, class_name: 'Project', foreign_key: 'project_manager_id'
   has_many :project_members
   has_many :projects, through: :project_members
+  has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
 
   enum :role, {
     superadmin: 0,
@@ -49,5 +50,9 @@ class User < ApplicationRecord
 
   def self.ransackable_associations(auth_object = nil)
     %w[company projects]
+  end
+
+  def unread_notifications_count
+    notifications.unread.count
   end
 end

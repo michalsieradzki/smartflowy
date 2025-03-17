@@ -1,0 +1,14 @@
+div id=dom_id(notification) class="list-group-item list-group-item-action p-2 #{notification.read? ? '' : 'bg-light'}"
+  .d-flex.justify-content-between.align-items-center
+    div
+      p.mb-1.small = notification.message
+      small.text-muted = l(notification.created_at, format: :short)
+    
+    - if notification.read?
+      = button_to mark_as_unread_notification_path(notification), method: :post, class: 'btn btn-sm btn-outline-secondary' do
+        i.bi.bi-envelope
+        span.ms-1 Oznacz jako nieprzeczytane
+    - else
+      = button_to mark_as_read_notification_path(notification), method: :post, class: 'btn btn-sm btn-outline-primary' do
+        i.bi.bi-envelope-open
+        span.ms-1 Oznacz jako przeczytane

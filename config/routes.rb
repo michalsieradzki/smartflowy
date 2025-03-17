@@ -50,5 +50,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :notifications, only: [:index] do
+    member do
+      post :mark_as_read
+      post :mark_as_unread
+    end
+
+    collection do
+      post :mark_all_as_read
+    end
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

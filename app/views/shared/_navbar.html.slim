@@ -7,10 +7,10 @@
       
       // Logo aplikacji
       = link_to "SmartFlowy", root_path, class: "navbar-brand mx-auto"
-      
-      // Przycisk do profilu użytkownika (po prawej)
-      button.navbar-toggler.border-0 type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUser" aria-controls="offcanvasUser"
-        i.bi.bi-person-circle
+
+      // Dropdown powiadomień (po prawej, przed profilem)
+      - if user_signed_in?
+        = render 'shared/notifications_dropdown'
 
   // Offcanvas menu - pokazywane na mobilnych po kliknięciu przycisku menu
   .offcanvas.offcanvas-start.bg-dark.text-white#offcanvasSidebar tabindex="-1" aria-labelledby="offcanvasSidebarLabel"
@@ -74,6 +74,25 @@
     
     .offcanvas-body
       - if user_signed_in?
+        - if current_user.notifications.recent.any?
+          .list-group.list-group-flush
+            - current_user.notifications.recent.each do |notification|
+              .list-group-item.list-group-item-action class=('bg-light' unless notification.read?)
+                .d-flex.flex-column
+                  .fw-bold = notification.message
+                  small.text-muted = l(notification.created_at, format: :short)
+                  - unless notification.read?
+                    = button_to mark_as_read_notification_path(notification), method: :post, class: 'btn btn-sm btn-primary mt-2 w-100' do
+                      i.bi.bi-check-circle.me-1
+                      | Oznacz jako przeczytane
+        - else
+          .text-center.text-muted.p-3
+            i.bi.bi-bell-slash.fs-4.d-block.mb-2
+            p Brak powiadomień
+      
+        .mt-3.text-center
+          = link_to notifications_path, class: "btn btn-outline-primary w-100" do
+            | Zobacz wszystkie powiadomienia
         .text-center.mb-4
           - avatar_url = "https://ui-avatars.com/api/?name=#{current_user.first_name}+#{current_user.last_name}&background=4FD1C5&color=fff&size=128"
           img.rounded-circle.mb-3 src=avatar_url width="96" height="96" alt=current_user.full_name

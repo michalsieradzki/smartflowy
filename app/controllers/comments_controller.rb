@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
     @comment.commentable = @task
 
     if @comment.save
+      Notification.notify_task_comment(@comment, current_user)
       redirect_to @task, notice: "Komentarz został dodany"
     else
       redirect_to @task, alert: "Nie udało się dodać komentarza: #{@comment.errors.full_messages.join(', ')}"

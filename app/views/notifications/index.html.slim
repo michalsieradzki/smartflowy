@@ -1,0 +1,20 @@
+.container.mt-4
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1 Powiadomienia
+    - if current_user.notifications.unread.any?
+      = button_to mark_all_as_read_notifications_path, method: :post, class: 'btn btn-outline-primary' do
+        i.bi.bi-check-all.me-2
+        | Oznacz wszystkie jako przeczytane
+
+  - if @notifications.any?
+    .card.mb-4
+      .list-group.list-group-flush
+        - @notifications.each do |notification|
+          = render "notification", notification: notification
+    
+    .d-flex.justify-content-center
+      = paginate @notifications
+  - else
+    .alert.alert-info
+      i.bi.bi-info-circle.me-2
+      | Nie masz żadnych powiadomień.
