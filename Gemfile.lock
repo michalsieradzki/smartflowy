@@ -101,7 +101,7 @@ GEM
       popper_js (>= 2.11.8, < 3)
     bootstrap-icons (1.0.14)
       nokogiri (~> 1)
-    brakeman (7.0.0)
+    brakeman (7.0.1)
       racc
     builder (3.3.0)
     cancancan (3.6.1)
